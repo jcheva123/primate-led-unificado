@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>MADISON | Control de contenidos</title>
+  <link rel="icon" type="image/png" href="./assets/logo-madison.png" />
+  <style>
+    :root { --bg:#170619; --card:rgba(42,12,44,.90); --text:#fffdf8; --muted:#d8c9d7; --accent:#dcb854; --brand-blue:#2a0c2c; --brand-purple:#5b2354; --brand-red:#dcb854; --danger:#e05b70; --line:rgba(255,255,255,0.14); }
+    html { color-scheme: dark; }
+    * { box-sizing:border-box; }
+    html, body { min-height:100%; margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: radial-gradient(circle at 16% 0%, rgba(220,184,84,.14), transparent 34%), radial-gradient(circle at 86% 16%, rgba(117,46,103,.30), transparent 36%), linear-gradient(145deg, #170619 0%, #2a0c2c 58%, #4a173f 100%); background-attachment:fixed; color: var(--text); }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 22px 18px 34px; }
+    h1 { margin: 6px 0 4px; font-size: 23px; }
+    h2 { margin: 0 0 10px; font-size: 16px; color: var(--text); }
+    .row { display:flex; gap:12px; flex-wrap: wrap; align-items: stretch; }
+    .card { background: var(--card); border-radius: 18px; padding: 16px; box-shadow: 0 14px 40px rgba(2,7,25,.36); border:1px solid rgba(255,255,255,.13); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    label { display:block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    select, input[type="number"] { width: 100%; padding: 12px 12px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,0.04); color: var(--text); outline: none; }
+    select option { background: #151520; color: var(--text); }
+    button, .btn { border:0; border-radius: 14px; padding: 12px 14px; background:linear-gradient(135deg,var(--brand-blue),var(--brand-purple) 52%,var(--brand-red)); color:#fff; font-weight:850; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; min-height:42px; box-shadow:0 7px 18px rgba(4,10,35,.24); }
+    button.secondary, .btn.secondary { background:rgba(255,255,255,.10); color:var(--text); font-weight:750; border:1px solid rgba(255,255,255,.10); box-shadow:none; }
+    button.danger { background: rgba(255,60,60,0.85); color:#fff; }
+    button.ghost, .btn.ghost { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.22); color:var(--text); font-weight:750; box-shadow:none; }
+    .grow { flex: 1 1 260px; }
+    .status { margin-top: 10px; color: var(--muted); font-size: 13px; }
+    #publish {
+      min-height: 60px;
+      padding: 16px 24px;
+      border-radius: 18px;
+      font-size: 16px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      transition: transform .12s ease, box-shadow .18s ease, background .18s ease, opacity .18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    #publish:hover { transform: translateY(-1px); }
+    #publish:active { transform: scale(.98); }
+    #publish.clean { background: rgba(255,255,255,0.12); color: var(--text); border: 1px solid rgba(255,255,255,0.18); box-shadow: none; }
+    #publish.dirty { background:#dcb854; color:#21131f; box-shadow:0 0 0 4px rgba(220,184,84,.22), 0 14px 34px rgba(0,0,0,.36); animation: publishPulse 1.45s ease-in-out infinite; }
+    #publish.publishing { background: rgba(255,255,255,0.20); color: var(--text); cursor: wait; animation: none; box-shadow: none; }
+    #publish.published { background: #2bd576; color: #06180c; box-shadow: 0 0 0 4px rgba(43,213,118,.16), 0 10px 26px rgba(0,0,0,.28); animation: none; }
+    #publish:disabled { opacity:.82; cursor: wait; }
+    .publishHint { color: var(--muted); font-size: 13px; font-weight: 800; min-height: 20px; display:flex; align-items:center; }
+    .publishHint.dirty { color:#ffeaa0; }
+    .publishHint.clean { color:#8dffae; }
+    @keyframes publishPulse {
+      0%,100% { transform: translateY(0); box-shadow: 0 0 0 4px rgba(220,184,84,.15), 0 14px 34px rgba(0,0,0,.32); }
+      50% { transform: translateY(-1px); box-shadow: 0 0 0 7px rgba(220,184,84,.24), 0 18px 42px rgba(0,0,0,.42); }
+    }
+
+    .pill { display:inline-block; padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,0.10); color: var(--muted); font-size: 12px; }
+    .headerLine { display:flex; gap:18px; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:14px; padding:16px 18px; border-radius:20px; background:rgba(42,12,44,.72); border:1px solid rgba(255,255,255,.14); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+    .brandBlock { display:flex; align-items:center; gap:18px; min-width:0; } .brandLogo { width:230px; height:84px; flex:0 0 auto; display:block; object-fit:contain; background:#2a0c2c; padding:6px 10px; border-radius:16px; box-shadow:0 12px 32px rgba(0,0,0,.36), 0 0 0 1px rgba(220,184,84,.26), 0 0 24px rgba(220,184,84,.10); border:1px solid rgba(220,184,84,.28); } .brandText { min-width:0; }
+    .smallTitle { color:var(--muted); font-size:13px; margin-bottom:10px; }
+    .topActions { display:flex; gap:8px; flex-wrap:wrap; margin: 0 0 14px; align-items:center; }
+    .dayButtons { display:flex; gap:7px; flex-wrap:wrap; }
+    .dayBtn { min-width:42px; min-height:42px; padding:10px 12px; background:rgba(255,255,255,0.07); color:var(--text); border:1px solid rgba(255,255,255,0.18); box-shadow:none; }
+    .dayBtn.on { background:#dcb854; color:#21131f; border-color:#ffd56a; box-shadow:0 0 0 3px rgba(220,184,84,.22), 0 8px 18px rgba(0,0,0,.30); }
+    .miniActions { display:flex; gap:8px; flex-wrap:wrap; margin-top:9px; }
+    .miniActions button { padding:8px 11px; min-height:34px; border-radius:11px; font-size:12px; }
+    .drop { border: 2px dashed rgba(255,255,255,0.18); border-radius: 16px; padding: 18px; text-align: center; color: var(--muted); background: rgba(255,255,255,0.03); cursor:pointer; }
+    .drop.drag { border-color: var(--accent); color: var(--text); }
+    .miniNote { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    .uploadPanel { display:none; margin-top:12px; padding:12px; border-radius:14px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10); }
+    .uploadPanel.show { display:block; }
+    .uploadTop { display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:8px; }
+    .uploadTitle { font-size:13px; font-weight:900; }
+    .uploadPercent { font-size:13px; font-weight:900; color:var(--accent); }
+    .uploadBar { height:12px; border-radius:999px; background:rgba(0,0,0,0.35); overflow:hidden; border:1px solid rgba(255,255,255,0.08); }
+    .uploadFill { width:0%; height:100%; border-radius:999px; background:linear-gradient(90deg,var(--brand-blue),var(--brand-purple),var(--brand-red)); transition:width .18s ease; }
+    .uploadDetail { margin-top:8px; color:var(--muted); font-size:12px; line-height:1.35; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .uploadOk { color:#8dffae; }
+    .fitBox { display:flex; flex-direction:column; gap:7px; min-width:260px; max-width:360px; }
+    .fitLabel { color:var(--muted); font-size:12px; font-weight:900; }
+    .fitButtons { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+    .fitChoice { min-height:74px !important; padding:8px !important; border-radius:13px !important; background:rgba(255,255,255,0.08) !important; color:var(--text) !important; border:1px solid rgba(255,255,255,0.13) !important; display:flex !important; gap:8px; align-items:center !important; justify-content:flex-start !important; text-align:left; }
+    .fitChoice.on { background:linear-gradient(135deg,rgba(91,35,84,.58),rgba(220,184,84,.20)) !important; border-color:rgba(255,255,255,.45) !important; color:var(--text) !important; }
+    .fitIcon { width:42px; height:42px; border-radius:10px; background:#050507; border:1px solid rgba(255,255,255,0.18); position:relative; flex:0 0 auto; overflow:hidden; }
+    .fitIcon span { position:absolute; display:block; background:var(--accent); border-radius:4px; }
+    .coverIcon span { inset:4px; }
+    .containIcon span { left:7px; right:7px; top:13px; bottom:13px; }
+    .fitText { display:flex; flex-direction:column; gap:2px; min-width:0; }
+    .fitText b { font-size:12px; line-height:1.1; }
+    .fitText small { color:var(--muted); font-size:11px; line-height:1.15; font-weight:650; }
+    .weekWrap { display:grid; gap: 10px; }
+    .weekGrid { display:grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); gap: 10px; }
+    .dayCard { border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); overflow: hidden; }
+    .dayHead { padding: 10px; font-weight: 900; border-bottom: 1px solid rgba(255,255,255,0.08); display:flex; justify-content: space-between; align-items:center; }
+    .slotCell { padding: 10px; border-top: 1px solid rgba(255,255,255,0.06); cursor: pointer; min-height:72px; }
+    .slotCell:hover { background: rgba(255,255,255,0.05); }
+    .slotCell.active { outline:2px solid rgba(255,255,255,.48); background:linear-gradient(135deg,rgba(91,35,84,.42),rgba(220,184,84,.15)); }
+    .slotTop { display:flex; justify-content: space-between; gap: 8px; align-items:center; }
+    .slotName { font-size: 12px; color: var(--muted); font-weight: 850; }
+    .count { font-size: 12px; color: var(--muted); }
+    .thumbs { margin-top: 8px; display:flex; gap: 6px; flex-wrap: wrap; }
+    .timg, .tvid { width: 22px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.35); object-fit: cover; display:inline-block; }
+    .tvid { display:flex; align-items:center; justify-content:center; font-size: 14px; }
+    .list { margin-top: 10px; display:flex; flex-direction: column; gap: 10px; }
+    .item { display:flex; align-items:center; gap: 10px; padding: 10px; border-radius: 14px; background: rgba(255,255,255,0.05); }
+    .thumb { width: 42px; height: 92px; border-radius: 12px; object-fit: cover; background:#000; flex: 0 0 auto; }
+    .meta { flex: 1 1 auto; min-width: 0; }
+    .meta .name { font-weight: 900; font-size: 13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .meta .sub { margin-top:4px; color:var(--muted); font-size:12px; }
+    .controls { display:flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+    .controls button { padding: 10px 12px; border-radius: 12px; min-height:38px; }
+    .controls input[type="number"] { width: 92px; padding: 10px; border-radius: 12px; }
+    @media (max-width:900px) { .weekGrid{grid-template-columns:1fr;} .item{align-items:flex-start;} .controls{width:100%;justify-content:flex-start;} } @media (max-width:620px) { .headerLine{align-items:flex-start;padding:14px;} .brandLogo{width:180px;height:66px;border-radius:14px;padding:5px 8px;} h1{font-size:20px;} .topActions{width:100%;margin:0;} .topActions button,.topActions .btn{flex:1 1 auto;} }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="headerLine">
+    <div class="brandBlock">
+      <img class="brandLogo" src="./assets/logo-madison.png" alt="Madison Brew Station">
+      <div class="brandText">
+        <h1>Panel de contenidos</h1>
+        <div class="smallTitle">MADISON · Programación semanal · Primate LED</div>
+      </div>
+    </div>
+    <div class="topActions">
+      <button id="viewDisplay" class="ghost" type="button">Ver display</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Cargar contenido al tótem</h2>
+    <div class="row">
+      <div class="grow">
+        <label>Días de emisión</label>
+        <div class="dayButtons" id="dayButtons"></div>
+        <div class="miniActions">
+          <button class="secondary" id="selectAllDays" type="button">Todos los días</button>
+          <button class="secondary" id="selectToday" type="button">Solo hoy</button>
+        </div>
+        <div class="status" id="daysHint"></div>
+      </div>
+      <div class="grow">
+        <label>Franja</label>
+        <select id="slot">
+          <option value="allday" selected>Todo el día</option>
+          <option value="morning">Mañana</option>
+          <option value="noon">Mediodía</option>
+          <option value="afternoon">Tarde</option>
+        </select>
+        <div class="status" id="slotHint" style="margin-top:6px"></div>
+      </div>
+      <div style="flex:0 0 auto">
+        <label>&nbsp;</label>
+        <button class="danger" id="clearSlot" type="button">Limpiar franja</button>
+      </div>
+    </div>
+
+    <div id="drop" class="drop" style="margin-top:12px">
+      Arrastrá los archivos acá o <button class="secondary" id="pick" type="button">Elegir archivos</button>
+      <input id="file" type="file" accept="image/*,video/*" multiple style="display:none" />
+      <div class="miniNote">Podés cargar imágenes JPG, PNG o WEBP y videos MP4 de hasta 80 MB por archivo. La resolución recomendada para preparar las piezas es <b>688 × 1204 px</b>.</div>
+    </div>
+
+    <div class="status" id="statusTop"></div>
+    <div id="uploadPanel" class="uploadPanel" aria-live="polite">
+      <div class="uploadTop">
+        <div class="uploadTitle" id="uploadTitle">Preparando carga…</div>
+        <div class="uploadPercent" id="uploadPercent">0%</div>
+      </div>
+      <div class="uploadBar"><div class="uploadFill" id="uploadFill"></div></div>
+      <div class="uploadDetail" id="uploadDetail">Esperando archivo…</div>
+    </div>
+    <div style="height:12px"></div>
+    <h2>Bloque seleccionado</h2>
+    <div class="status" id="editTitle"></div>
+    <div class="list" id="list"></div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <h2>Semana</h2>
+    <div class="weekWrap">
+      <div class="weekGrid" id="week"></div>
+      <div class="row" style="margin-top:12px; align-items:center">
+        <button id="publish" type="button" class="clean">PUBLICADO ✓</button>
+        <div id="publishHint" class="publishHint clean">Sin cambios pendientes</div>
+        <button class="secondary" id="reload" type="button">Recargar</button>
+        <button class="secondary" id="clearDay" type="button">Limpiar días seleccionados</button>
+        <button class="secondary" id="clearAll" type="button">Limpiar todo</button>
+        <div class="status" id="status" style="margin:0"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  const CONFIG = {
+    apiBase: "https://primateled-poster-api.jcheva.workers.dev",
+    siteId: "madison",
+    displayUrl: "https://primateled.pages.dev/madisonpanel/display/"
+  };
+
+  const API_BASE = CONFIG.apiBase;
+  const SITE_ID = CONFIG.siteId;
+  const MAX_FILE_MB = 80;
+  const MAX_FILE_BYTES = MAX_FILE_MB * 1024 * 1024;
+  const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "video/mp4"]);
+
+  const DAYS = [
+    { key:"mon", label:"Lunes", short:"L" },
+    { key:"tue", label:"Martes", short:"M" },
+    { key:"wed", label:"Miércoles", short:"X" },
+    { key:"thu", label:"Jueves", short:"J" },
+    { key:"fri", label:"Viernes", short:"V" },
+    { key:"sat", label:"Sábado", short:"S" },
+    { key:"sun", label:"Domingo", short:"D" }
+  ];
+
+  const SLOTS = [
+    { key:"allday", label:"Todo el día" },
+    { key:"morning", label:"Mañana" },
+    { key:"noon", label:"Mediodía" },
+    { key:"afternoon", label:"Tarde" }
+  ];
+
+  const DEFAULT_SLOTS = {
+    morning:{start:"06:00", end:"11:30"},
+    noon:{start:"11:30", end:"16:30"},
+    afternoon:{start:"16:30", end:"20:30"}
+  };
+
+  const slotSel = document.getElementById("slot");
+  const weekEl = document.getElementById("week");
+  const listEl = document.getElementById("list");
+  const statusEl = document.getElementById("status");
+  const statusTopEl = document.getElementById("statusTop");
+  const publishBtnEl = document.getElementById("publish");
+  const publishHintEl = document.getElementById("publishHint");
+  const uploadPanelEl = document.getElementById("uploadPanel");
+  const uploadTitleEl = document.getElementById("uploadTitle");
+  const uploadPercentEl = document.getElementById("uploadPercent");
+  const uploadFillEl = document.getElementById("uploadFill");
+  const uploadDetailEl = document.getElementById("uploadDetail");
+  const editTitleEl = document.getElementById("editTitle");
+  const slotHintEl = document.getElementById("slotHint");
+  const daysHintEl = document.getElementById("daysHint");
+  const dayButtonsEl = document.getElementById("dayButtons");
+  const fileInput = document.getElementById("file");
+  const pickBtn = document.getElementById("pick");
+  const drop = document.getElementById("drop");
+
+  let schedule = null;
+  let selectedDays = DAYS.map(d => d.key);
+  let isUploading = false;
+  let hasPendingChanges = false;
+  let isPublishing = false;
+  let pendingStorageDeletes = new Set();
+
+  function setStatus(msg) { statusEl.textContent = msg || ""; }
+  function setStatusTop(msg) { statusTopEl.textContent = msg || ""; }
+
+  function updatePublishButton(hint) {
+    publishBtnEl.classList.remove("clean", "dirty", "publishing", "published");
+    publishHintEl?.classList.remove("clean", "dirty");
+
+    if (isPublishing) {
+      publishBtnEl.classList.add("publishing");
+      publishBtnEl.textContent = "PUBLICANDO…";
+      publishBtnEl.disabled = true;
+      if (publishHintEl) publishHintEl.textContent = "Enviando programación y ordenando archivos…";
+      return;
+    }
+
+    publishBtnEl.disabled = false;
+    if (hasPendingChanges) {
+      publishBtnEl.classList.add("dirty");
+      publishBtnEl.textContent = "PUBLICAR CAMBIOS";
+      if (publishHintEl) {
+        publishHintEl.classList.add("dirty");
+        publishHintEl.textContent = hint || "Hay cambios pendientes. Tocá publicar para enviarlos al display.";
+      }
+    } else {
+      publishBtnEl.classList.add("clean");
+      publishBtnEl.textContent = "PUBLICADO ✓";
+      if (publishHintEl) {
+        publishHintEl.classList.add("clean");
+        publishHintEl.textContent = hint || "Sin cambios pendientes.";
+      }
+    }
+  }
+
+  function markDirty(hint) { hasPendingChanges = true; updatePublishButton(hint); }
+  function markClean(hint) { hasPendingChanges = false; isPublishing = false; updatePublishButton(hint); }
+  function setPublishing(value) { isPublishing = Boolean(value); updatePublishButton(); }
+
+  function uuid() { return Math.random().toString(16).slice(2) + Date.now().toString(16); }
+  function typeFromFile(file) { return file.type === "video/mp4" ? "video" : "image"; }
+  function humanFileSize(bytes) { return (bytes / (1024 * 1024)).toFixed(1).replace(".0", "") + " MB"; }
+  function dayLabel(key){ return DAYS.find(d => d.key === key)?.label || key; }
+  function slotLabel(key){ return SLOTS.find(s => s.key === key)?.label || key; }
+
+  function nowWeekday(tz) {
+    const fmt = new Intl.DateTimeFormat("en-US", { timeZone: tz, weekday:"short" });
+    return fmt.format(new Date()).toLowerCase().slice(0,3);
+  }
+
+  function defaultSchedule(){
+    return { timezone:"America/Argentina/Buenos_Aires", slots: DEFAULT_SLOTS, days:{}, default:{allday:[],morning:[],noon:[],afternoon:[]} };
+  }
+
+  function ensureDay(scheduleObj, dayKey) {
+    scheduleObj.days = scheduleObj.days || {};
+    if (!scheduleObj.days[dayKey]) scheduleObj.days[dayKey] = { allday:[], morning:[], noon:[], afternoon:[] };
+    SLOTS.forEach(s => {
+      if (!Array.isArray(scheduleObj.days[dayKey][s.key])) scheduleObj.days[dayKey][s.key] = [];
+    });
+  }
+
+  function ensureSchedule() {
+    if (!schedule || typeof schedule !== "object") schedule = defaultSchedule();
+    schedule.timezone = schedule.timezone || "America/Argentina/Buenos_Aires";
+    schedule.slots = schedule.slots || DEFAULT_SLOTS;
+    schedule.slots.morning = schedule.slots.morning || DEFAULT_SLOTS.morning;
+    schedule.slots.noon = schedule.slots.noon || DEFAULT_SLOTS.noon;
+    schedule.slots.afternoon = schedule.slots.afternoon || DEFAULT_SLOTS.afternoon;
+    schedule.default = schedule.default || {allday:[],morning:[],noon:[],afternoon:[]};
+    DAYS.forEach(d => ensureDay(schedule, d.key));
+  }
+
+  function niceName(item) {
+    if (item?.originalName) return item.originalName;
+    try {
+      const last = item.src.split("/").pop() || item.src;
+      return decodeURIComponent(last.split("?")[0]).slice(0, 52);
+    } catch { return "archivo"; }
+  }
+
+  function slotTimeText(slotKey) {
+    if (!schedule?.slots || slotKey === "allday") return "";
+    const s = schedule.slots[slotKey];
+    return s?.start && s?.end ? `${s.start} → ${s.end}` : "";
+  }
+
+  function selectedDayObjects(){ return DAYS.filter(d => selectedDays.includes(d.key)); }
+
+  function updateDaysHint(){
+    const n = selectedDays.length;
+    if (!n) { daysHintEl.textContent = "Seleccioná al menos un día."; return; }
+    if (n === 7) { daysHintEl.textContent = "Seleccionado: todos los días."; return; }
+    daysHintEl.textContent = "Seleccionado: " + selectedDayObjects().map(d => d.label).join(", ") + ".";
+  }
+
+  function updateSlotHint() {
+    const slotKey = slotSel.value;
+    if (slotKey === "allday") slotHintEl.textContent = "Sale durante todo el día y se combina con la franja activa.";
+    else slotHintEl.textContent = slotTimeText(slotKey) ? `Horario: ${slotTimeText(slotKey)}` : "";
+  }
+
+  function renderDayButtons(){
+    dayButtonsEl.innerHTML = "";
+    DAYS.forEach(d => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "dayBtn" + (selectedDays.includes(d.key) ? " on" : "");
+      btn.textContent = d.short;
+      btn.title = d.label;
+      btn.onclick = () => {
+        if (selectedDays.includes(d.key)) {
+          if (selectedDays.length > 1) selectedDays = selectedDays.filter(x => x !== d.key);
+        } else {
+          selectedDays.push(d.key);
+          selectedDays = DAYS.map(x => x.key).filter(x => selectedDays.includes(x));
+        }
+        renderAll();
+      };
+      dayButtonsEl.appendChild(btn);
+    });
+    updateDaysHint();
+  }
+
+  function getPrimaryDay(){ return selectedDays[0] || nowWeekday(schedule?.timezone || "America/Argentina/Buenos_Aires"); }
+  function getSelectedLists(){
+    const slotKey = slotSel.value;
+    return selectedDays.map(dayKey => { ensureDay(schedule, dayKey); return schedule.days[dayKey][slotKey]; });
+  }
+  function getPrimaryList(){ ensureDay(schedule, getPrimaryDay()); return schedule.days[getPrimaryDay()][slotSel.value]; }
+
+  function countDay(dayKey) {
+    const b = schedule.days[dayKey];
+    return b.allday.length + b.morning.length + b.noon.length + b.afternoon.length;
+  }
+
+  function collectStorageKeys(root) {
+    const keys = new Set();
+    function visit(value) {
+      if (!value) return;
+      if (Array.isArray(value)) {
+        value.forEach(item => {
+          if (item && typeof item.storageKey === "string" && item.storageKey) keys.add(item.storageKey);
+        });
+      } else if (typeof value === "object") {
+        Object.values(value).forEach(visit);
+      }
+    }
+    visit(root);
+    return keys;
+  }
+
+  function queueRemovedKeys(beforeKeys) {
+    const afterKeys = collectStorageKeys(schedule);
+    beforeKeys.forEach(key => {
+      if (!afterKeys.has(key)) pendingStorageDeletes.add(key);
+    });
+  }
+
+  function renderWeek() {
+    ensureSchedule();
+    weekEl.innerHTML = "";
+    const selSlot = slotSel.value;
+
+    DAYS.forEach(d => {
+      const card = document.createElement("div");
+      card.className = "dayCard";
+      const head = document.createElement("div");
+      head.className = "dayHead";
+      head.innerHTML = `<span>${d.label}</span><span class="pill">${countDay(d.key)} ítems</span>`;
+      card.appendChild(head);
+
+      SLOTS.forEach(s => {
+        const cell = document.createElement("div");
+        cell.className = "slotCell";
+        if (selectedDays.includes(d.key) && s.key === selSlot) cell.classList.add("active");
+        const list = schedule.days[d.key][s.key] || [];
+        const top = document.createElement("div");
+        top.className = "slotTop";
+        top.innerHTML = `<div class="slotName">${s.label}</div><div class="count">${list.length}</div>`;
+        cell.appendChild(top);
+
+        if (!list.length) {
+          const empty = document.createElement("div");
+          empty.className = "status";
+          empty.style.margin = "6px 0 0";
+          empty.textContent = "—";
+          cell.appendChild(empty);
+        } else {
+          const thumbs = document.createElement("div");
+          thumbs.className = "thumbs";
+          list.slice(0, 6).forEach(it => {
+            if (it.type === "image") {
+              const img = document.createElement("img");
+              img.className = "timg";
+              img.src = it.src;
+              img.loading = "lazy";
+              thumbs.appendChild(img);
+            } else {
+              const v = document.createElement("div");
+              v.className = "tvid";
+              v.title = "Video";
+              v.textContent = "🎥";
+              thumbs.appendChild(v);
+            }
+          });
+          cell.appendChild(thumbs);
+        }
+
+        cell.onclick = () => { selectedDays = [d.key]; slotSel.value = s.key; renderAll(); };
+        card.appendChild(cell);
+      });
+      weekEl.appendChild(card);
+    });
+  }
+
+  function renderEditorList() {
+    const slotKey = slotSel.value;
+    const list = getPrimaryList();
+    const dayText = selectedDays.length === 7 ? "todos los días" : selectedDayObjects().map(d => d.label).join(", ");
+    const time = slotTimeText(slotKey);
+    editTitleEl.innerHTML = `Editando: <b>${dayText}</b> · <b>${slotLabel(slotKey)}${time ? " (" + time + ")" : ""}</b>`;
+    listEl.innerHTML = "";
+
+    if (!list.length) {
+      const empty = document.createElement("div");
+      empty.className = "status";
+      empty.textContent = "No hay contenidos en este bloque.";
+      listEl.appendChild(empty);
+      return;
+    }
+
+    list.forEach((item, i) => {
+      const row = document.createElement("div");
+      row.className = "item";
+      const thumb = document.createElement(item.type === "video" ? "div" : "img");
+      thumb.className = "thumb";
+      if (item.type === "video") {
+        thumb.style.display = "flex";
+        thumb.style.alignItems = "center";
+        thumb.style.justifyContent = "center";
+        thumb.textContent = "🎥";
+      } else {
+        thumb.src = item.src;
+        thumb.loading = "lazy";
+      }
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      const name = document.createElement("div");
+      name.className = "name";
+      name.textContent = `${item.type === "video" ? "Video" : "Imagen"} · ${niceName(item)}`;
+      const sub = document.createElement("div");
+      sub.className = "sub";
+      sub.textContent = selectedDays.length > 1 ? `Aplicado a ${selectedDays.length} días seleccionados` : dayLabel(getPrimaryDay());
+      meta.appendChild(name);
+      meta.appendChild(sub);
+
+      const controls = document.createElement("div");
+      controls.className = "controls";
+      const up = document.createElement("button");
+      up.className = "secondary";
+      up.textContent = "↑";
+      up.type = "button";
+      up.onclick = () => {
+        if (i > 0) {
+          getSelectedLists().forEach(l => { if (i < l.length) [l[i-1], l[i]] = [l[i], l[i-1]]; });
+          markDirty("Orden modificado. Publicá los cambios para aplicarlos.");
+          renderAll();
+        }
+      };
+
+      const down = document.createElement("button");
+      down.className = "secondary";
+      down.textContent = "↓";
+      down.type = "button";
+      down.onclick = () => {
+        getSelectedLists().forEach(l => { if (i < l.length - 1) [l[i+1], l[i]] = [l[i], l[i+1]]; });
+        markDirty("Orden modificado. Publicá los cambios para aplicarlos.");
+        renderAll();
+      };
+      controls.appendChild(up);
+      controls.appendChild(down);
+
+      if (item.type === "image") {
+        const durWrap = document.createElement("div");
+        durWrap.style.display = "flex";
+        durWrap.style.flexDirection = "column";
+        durWrap.style.gap = "4px";
+        durWrap.style.alignItems = "flex-end";
+        const durLabel = document.createElement("div");
+        durLabel.style.fontSize = "12px";
+        durLabel.style.color = "var(--muted)";
+        durLabel.style.fontWeight = "900";
+        durLabel.textContent = "Duración";
+        const dur = document.createElement("input");
+        dur.type = "number";
+        dur.min = "2";
+        dur.max = "60";
+        dur.value = typeof item.duration === "number" ? item.duration : 8;
+        dur.onchange = () => {
+          const val = Math.max(2, Math.min(60, Number(dur.value || 8)));
+          getSelectedLists().forEach(l => { if (l[i]?.type === "image") l[i].duration = val; });
+          markDirty("Duración modificada. Publicá los cambios para aplicarlos.");
+        };
+        durWrap.appendChild(durLabel);
+        durWrap.appendChild(dur);
+        controls.appendChild(durWrap);
+      }
+
+      const fitBox = document.createElement("div");
+      fitBox.className = "fitBox";
+      const fitLabel = document.createElement("div");
+      fitLabel.className = "fitLabel";
+      fitLabel.textContent = item.type === "image" ? "Cómo mostrar la imagen" : "Cómo mostrar el video";
+      const fitButtons = document.createElement("div");
+      fitButtons.className = "fitButtons";
+      const currentFit = item.fit === "cover" ? "cover" : "contain";
+      const fitOptions = [
+        { key:"cover", label:"Pantalla completa", help:"Llena todo; puede recortar.", icon:"cover" },
+        { key:"contain", label:item.type === "image" ? "Imagen entera" : "Video entero", help:"No recorta; puede dejar barras.", icon:"contain" }
+      ];
+
+      fitOptions.forEach(opt => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "fitChoice" + (currentFit === opt.key ? " on" : "");
+        b.innerHTML = `<span class="fitIcon ${opt.icon}Icon"><span></span></span><span class="fitText"><b>${opt.label}</b><small>${opt.help}</small></span>`;
+        b.onclick = () => {
+          getSelectedLists().forEach(l => { if (l[i]?.type === item.type) l[i].fit = opt.key; });
+          markDirty("Modo de visualización modificado. Publicá los cambios para aplicarlos.");
+          renderAll();
+        };
+        fitButtons.appendChild(b);
+      });
+      fitBox.appendChild(fitLabel);
+      fitBox.appendChild(fitButtons);
+      controls.appendChild(fitBox);
+
+      const del = document.createElement("button");
+      del.className = "danger";
+      del.textContent = "✕";
+      del.type = "button";
+      del.onclick = () => {
+        const before = collectStorageKeys(schedule);
+        getSelectedLists().forEach(l => { if (i < l.length) l.splice(i, 1); });
+        queueRemovedKeys(before);
+        markDirty("Contenido quitado. El cambio se aplicará cuando publiques.");
+        renderAll();
+      };
+      controls.appendChild(del);
+
+      row.appendChild(thumb);
+      row.appendChild(meta);
+      row.appendChild(controls);
+      listEl.appendChild(row);
+    });
+  }
+
+  function renderAll(){ renderDayButtons(); updateSlotHint(); renderWeek(); renderEditorList(); }
+
+  function updateUploadPanel(title, percent, detail, done) {
+    const p = Math.max(0, Math.min(100, Math.round(percent || 0)));
+    uploadPanelEl.classList.add("show");
+    uploadTitleEl.textContent = title || "Subiendo…";
+    uploadPercentEl.textContent = p + "%";
+    uploadFillEl.style.width = p + "%";
+    uploadDetailEl.textContent = detail || "";
+    uploadTitleEl.classList.toggle("uploadOk", Boolean(done));
+  }
+
+  function hideUploadPanelLater() {
+    setTimeout(() => {
+      uploadPanelEl.classList.remove("show");
+      uploadTitleEl.classList.remove("uploadOk");
+      uploadFillEl.style.width = "0%";
+      uploadPercentEl.textContent = "0%";
+    }, 3500);
+  }
+
+  function r2Upload(file, onProgress) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", `${API_BASE}/api/${SITE_ID}/upload`, true);
+      xhr.setRequestHeader("Content-Type", file.type);
+      xhr.setRequestHeader("X-File-Name", encodeURIComponent(file.name));
+      xhr.setRequestHeader("X-File-Size", String(file.size));
+      xhr.upload.onprogress = e => {
+        if (e.lengthComputable && typeof onProgress === "function") onProgress(e.loaded, e.total);
+      };
+      xhr.onload = () => {
+        let data = null;
+        try { data = JSON.parse(xhr.responseText); } catch {}
+        if (xhr.status >= 200 && xhr.status < 300 && data?.ok) resolve(data);
+        else reject(new Error(data?.error || `API HTTP ${xhr.status}`));
+      };
+      xhr.onerror = () => reject(new Error("No se pudo subir el archivo. Revisá la conexión."));
+      xhr.send(file);
+    });
+  }
+
+  async function apiGetSchedule() {
+    const res = await fetch(`${API_BASE}/api/${SITE_ID}/schedule`, { cache:"no-store" });
+    if (!res.ok) throw new Error(`API HTTP ${res.status}`);
+    return await res.json();
+  }
+
+  async function apiPutSchedule() {
+    schedule.updatedAt = new Date().toISOString();
+    const res = await fetch(`${API_BASE}/api/${SITE_ID}/schedule`, {
+      method:"PUT",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(schedule)
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw new Error(data?.error || `API HTTP ${res.status}`);
+    return data;
+  }
+
+  async function apiDeleteMedia(storageKey) {
+    const res = await fetch(`${API_BASE}/api/${SITE_ID}/media`, {
+      method:"DELETE",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({storageKey})
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw new Error(data?.error || `No se pudo borrar ${storageKey}`);
+    return data;
+  }
+
+  async function flushPendingDeletes() {
+    const activeKeys = collectStorageKeys(schedule);
+    const failures = [];
+    for (const key of [...pendingStorageDeletes]) {
+      if (activeKeys.has(key)) {
+        pendingStorageDeletes.delete(key);
+        continue;
+      }
+      try {
+        await apiDeleteMedia(key);
+        pendingStorageDeletes.delete(key);
+      } catch (error) {
+        failures.push(key);
+      }
+    }
+    return failures;
+  }
+
+  async function handleFiles(files) {
+    if (!schedule) return;
+    if (isUploading) { setStatusTop("Ya hay una carga en curso."); return; }
+    if (!selectedDays.length) { setStatusTop("Seleccioná al menos un día."); return; }
+
+    const accepted = [];
+    const rejected = [];
+    for (const file of files) {
+      if (!ALLOWED_TYPES.has(file.type)) rejected.push(`${file.name}: formato no admitido`);
+      else if (file.size > MAX_FILE_BYTES) rejected.push(`${file.name}: ${humanFileSize(file.size)} supera ${MAX_FILE_MB} MB`);
+      else accepted.push(file);
+    }
+
+    if (rejected.length) alert("No se cargarán estos archivos:\n\n" + rejected.join("\n"));
+    if (!accepted.length) { setStatusTop("No hay archivos válidos para subir."); return; }
+
+    const totalBytes = accepted.reduce((sum, f) => sum + Math.max(f.size, 1), 0);
+    let uploadedBytesBefore = 0;
+    let uploadedCount = 0;
+    const slotKey = slotSel.value;
+
+    isUploading = true;
+    pickBtn.disabled = true;
+    setStatusTop("Subiendo archivos…");
+    updateUploadPanel("Subiendo archivos…", 0, `${accepted.length} archivo/s en cola`, false);
+
+    try {
+      for (let fileIndex = 0; fileIndex < accepted.length; fileIndex++) {
+        const file = accepted[fileIndex];
+        const kind = typeFromFile(file);
+        const fileLabel = `${fileIndex + 1}/${accepted.length} · ${file.name} · ${humanFileSize(file.size)}`;
+        const uploaded = await r2Upload(file, loaded => {
+          const overall = ((uploadedBytesBefore + loaded) / totalBytes) * 100;
+          updateUploadPanel("Subiendo archivos…", overall, fileLabel, false);
+        });
+
+        uploadedBytesBefore += Math.max(file.size, 1);
+        const base = {
+          id:uuid(),
+          type:kind,
+          src:uploaded.publicUrl || uploaded.src,
+          storageKey:uploaded.storageKey,
+          originalName:uploaded.originalName || file.name,
+          size:uploaded.size || file.size,
+          fit:"contain"
+        };
+        if (kind === "image") base.duration = 8;
+        selectedDays.forEach(dayKey => {
+          ensureDay(schedule, dayKey);
+          schedule.days[dayKey][slotKey].push({...base, id:uuid()});
+        });
+        uploadedCount++;
+      }
+
+      updateUploadPanel("Carga completa ✅", 100, `${uploadedCount} archivo/s cargado/s. Ahora tocá PUBLICAR.`, true);
+      setStatusTop(`Listo ✅ ${uploadedCount} archivo/s cargado/s. Ahora tocá PUBLICAR.`);
+      markDirty("Contenido nuevo cargado. Publicá los cambios para verlo en pantalla.");
+      hideUploadPanelLater();
+      renderAll();
+    } catch (error) {
+      updateUploadPanel("Error en la carga", Math.max(5, (uploadedBytesBefore / totalBytes) * 100), error.message, false);
+      setStatusTop(error.message);
+    } finally {
+      isUploading = false;
+      pickBtn.disabled = false;
+    }
+  }
+
+  function setupDnD() {
+    drop.addEventListener("click", e => { if (e.target?.id !== "pick") fileInput.click(); });
+    const prevent = e => { e.preventDefault(); e.stopPropagation(); };
+    drop.addEventListener("dragenter", e => { prevent(e); drop.classList.add("drag"); }, true);
+    drop.addEventListener("dragover", e => { prevent(e); drop.classList.add("drag"); }, true);
+    drop.addEventListener("dragleave", e => { prevent(e); drop.classList.remove("drag"); }, true);
+    drop.addEventListener("drop", async e => {
+      prevent(e);
+      drop.classList.remove("drag");
+      const files = [...(e.dataTransfer?.files || [])];
+      if (files.length) await handleFiles(files);
+    }, true);
+    window.addEventListener("dragover", e => e.preventDefault());
+    window.addEventListener("drop", e => e.preventDefault());
+  }
+
+  document.getElementById("selectAllDays").onclick = () => { selectedDays = DAYS.map(d => d.key); renderAll(); };
+  document.getElementById("selectToday").onclick = () => { selectedDays = [nowWeekday(schedule?.timezone || "America/Argentina/Buenos_Aires")]; renderAll(); };
+
+  publishBtnEl.onclick = async () => {
+    if (!hasPendingChanges) { setStatus("No hay cambios pendientes."); updatePublishButton("Todo está guardado."); return; }
+    try {
+      setPublishing(true);
+      setStatus("Publicando programación…");
+      const result = await apiPutSchedule();
+      const failures = await flushPendingDeletes();
+      markClean(failures.length ? "La programación fue publicada, pero algunos archivos antiguos no pudieron eliminarse." : "Publicado correctamente. El display se actualizará automáticamente.");
+      setStatus(`Publicado ✅${result?.version ? " (v" + result.version + ")" : ""}${failures.length ? " · hay archivos antiguos pendientes" : ""}`);
+    } catch (error) {
+      isPublishing = false;
+      hasPendingChanges = true;
+      updatePublishButton("No se pudo publicar. Intentá nuevamente.");
+      setStatus(error.message);
+    }
+  };
+
+  document.getElementById("reload").onclick = async () => {
+    if (hasPendingChanges && !confirm("Hay cambios sin publicar. Si recargás, se perderán. ¿Continuar?")) return;
+    try {
+      setStatus("Recargando…");
+      schedule = await apiGetSchedule();
+      ensureSchedule();
+      pendingStorageDeletes.clear();
+      markClean("Datos recargados. Sin cambios pendientes.");
+      setStatus("OK");
+      renderAll();
+    } catch (error) { setStatus(error.message); }
+  };
+
+  document.getElementById("clearSlot").onclick = () => {
+    if (!schedule || !selectedDays.length) return;
+    if (!confirm(`¿Limpiar ${slotLabel(slotSel.value)} en ${selectedDays.length === 7 ? "todos los días" : selectedDayObjects().map(d=>d.label).join(", ")}?`)) return;
+    const before = collectStorageKeys(schedule);
+    selectedDays.forEach(dayKey => { ensureDay(schedule, dayKey); schedule.days[dayKey][slotSel.value] = []; });
+    queueRemovedKeys(before);
+    setStatus("Franja limpiada. Tocá PUBLICAR para aplicar.");
+    markDirty("Franja limpiada. Publicá los cambios para aplicarlos.");
+    renderAll();
+  };
+
+  document.getElementById("clearDay").onclick = () => {
+    if (!schedule || !selectedDays.length) return;
+    if (!confirm("¿Limpiar los días seleccionados completos?")) return;
+    const before = collectStorageKeys(schedule);
+    selectedDays.forEach(dayKey => { schedule.days[dayKey] = {allday:[],morning:[],noon:[],afternoon:[]}; });
+    queueRemovedKeys(before);
+    setStatus("Días limpiados. Tocá PUBLICAR para aplicar.");
+    markDirty("Días limpiados. Publicá los cambios para aplicarlos.");
+    renderAll();
+  };
+
+  document.getElementById("clearAll").onclick = () => {
+    if (!schedule || !confirm("¿Limpiar TODA la semana?")) return;
+    const before = collectStorageKeys(schedule);
+    DAYS.forEach(d => { schedule.days[d.key] = {allday:[],morning:[],noon:[],afternoon:[]}; });
+    schedule.default = {allday:[],morning:[],noon:[],afternoon:[]};
+    queueRemovedKeys(before);
+    setStatus("Semana limpiada. Tocá PUBLICAR para aplicar.");
+    markDirty("Semana limpiada. Publicá los cambios para aplicarlos.");
+    renderAll();
+  };
+
+  pickBtn.onclick = () => fileInput.click();
+  fileInput.onchange = async () => {
+    const files = [...(fileInput.files || [])];
+    fileInput.value = "";
+    if (files.length) await handleFiles(files);
+  };
+  slotSel.onchange = renderAll;
+  document.getElementById("viewDisplay").onclick = () => window.open(CONFIG.displayUrl, "_blank");
+
+  (async function boot(){
+    setupDnD();
+    try {
+      setStatus("Cargando…");
+      schedule = await apiGetSchedule();
+      ensureSchedule();
+      markClean("Sin cambios pendientes.");
+      setStatus("OK");
+      renderAll();
+    } catch (error) {
+      schedule = defaultSchedule();
+      ensureSchedule();
+      markClean("Sin cambios pendientes.");
+      setStatus(error.message);
+      renderAll();
+    }
+  })();
+
+</script>
+</body>
+</html>

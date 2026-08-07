@@ -1,0 +1,25 @@
+MADISON — Panel de contenidos LED
+
+Carpeta para Cloudflare Pages:
+
+madisonpanel/
+  index.html
+  assets/
+    logo-madison.png
+  display/
+    index.html
+
+URLs previstas:
+- Panel: https://primateled.pages.dev/madisonpanel/
+- Display: https://primateled.pages.dev/madisonpanel/display/
+
+Backend independiente:
+- siteId: madison
+- schedule: /api/madison/schedule
+- upload: /api/madison/upload
+- media: /api/madison/media
+- almacenamiento local Taurus: madison_tb40_
+
+IMPORTANTE:
+El Worker primateled-poster-api debe incluir "madison" en ALLOWED_SITES.
+No reutiliza programación ni archivos de poster ni posterofi.

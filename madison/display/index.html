@@ -1,0 +1,1062 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>MADISON | Display LED</title>
+  <style>
+    html, body {
+      width:100%;
+      height:100%;
+      margin:0;
+      background:#000;
+      overflow:hidden;
+    }
+
+    body {
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+
+    #stage {
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:#000;
+    }
+
+    .mediaSlot {
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:#000;
+      visibility:visible;
+      opacity:0;
+      z-index:1;
+      pointer-events:none;
+      will-change:opacity;
+      transform:translateZ(0);
+      -webkit-transform:translateZ(0);
+    }
+
+    .mediaSlot.active {
+      opacity:1;
+      z-index:3;
+    }
+
+    .mediaSlot img,
+    .mediaSlot video {
+      position:absolute;
+      left:0;
+      top:0;
+      width:100%;
+      height:100%;
+      background:#000;
+      object-fit:contain;
+      display:none;
+      transform:translateZ(0);
+      -webkit-transform:translateZ(0);
+    }
+
+    #cover {
+      position:absolute;
+      inset:0;
+      background:#000;
+      z-index:35;
+      display:block;
+    }
+
+    #msg {
+      position:absolute;
+      left:0;
+      right:0;
+      top:50%;
+      transform:translateY(-50%);
+      z-index:40;
+      text-align:center;
+      color:#fff;
+      padding:0 20px;
+      font-size:24px;
+      line-height:1.3;
+      display:none;
+    }
+
+    #msg small {
+      display:block;
+      opacity:.75;
+      font-size:15px;
+      margin-top:10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="stage">
+    <div id="slotA" class="mediaSlot">
+      <img alt="">
+      <video muted playsinline webkit-playsinline preload="auto"></video>
+    </div>
+    <div id="slotB" class="mediaSlot">
+      <img alt="">
+      <video muted playsinline webkit-playsinline preload="auto"></video>
+    </div>
+    <div id="cover"></div>
+    <div id="msg"></div>
+  </div>
+
+<script>
+(function () {
+  var API_URL = "https://primateled-poster-api.jcheva.workers.dev/api/madison/schedule";
+  var REFRESH_MS = 60000;
+  var IMAGE_DEFAULT_SECONDS = 8;
+  var LOAD_TIMEOUT_MS = 30000;
+  var VIDEO_FIRST_FRAME_DELAY_MS = 240;
+  var VIDEO_STALL_RETRY_MS = 8000;
+  var VIDEO_STALL_SKIP_MS = 90000;
+  var VIDEO_HARD_MAX_SECONDS = 2 * 60 * 60;
+  var PRELOAD_NEXT_VIDEO = true;
+  var STORAGE_PREFIX = "madison_tb40_";
+  var KEY_PLAYLIST = STORAGE_PREFIX + "playlist";
+  var KEY_SIG = STORAGE_PREFIX + "sig";
+  var KEY_NEXT_INDEX = STORAGE_PREFIX + "next_index"; // compatibilidad con la versión anterior
+  var KEY_CURRENT_INDEX = STORAGE_PREFIX + "current_index";
+  var KEY_CURRENT_SIG = STORAGE_PREFIX + "current_sig";
+  var KEY_ITEM_STARTED_AT = STORAGE_PREFIX + "item_started_at";
+  var KEY_VIDEO_TIME = STORAGE_PREFIX + "video_time";
+  var KEY_LAST_START = STORAGE_PREFIX + "last_start";
+  var KEY_BOOT_LOG = STORAGE_PREFIX + "boot_log";
+
+  var coverEl = document.getElementById("cover");
+  var msgEl = document.getElementById("msg");
+
+  var slots = [makeSlot("slotA"), makeSlot("slotB")];
+  var activeSlotIndex = -1;
+  var schedule = null;
+  var playlist = [];
+  var playlistSig = "";
+  var idx = 0;
+  var generation = 0;
+  var transitionTimer = null;
+  var playTimer = null;
+  var videoWatchTimer = null;
+  var videoHardTimer = null;
+  var lastVideoProgressAt = 0;
+  var lastVideoTime = 0;
+  var isPlaying = false;
+  var transitionInProgress = false;
+  var bootResumeInfo = null;
+  var bootResumeConsumed = false;
+
+  function makeSlot(id) {
+    var root = document.getElementById(id);
+    return {
+      root: root,
+      img: root.getElementsByTagName("img")[0],
+      video: root.getElementsByTagName("video")[0],
+      item: null,
+      sig: "",
+      ready: false,
+      failed: false,
+      loading: false,
+      activateCallback: null,
+      loadToken: 0
+    };
+  }
+
+  function showMsg(html) {
+    msgEl.innerHTML = html;
+    msgEl.style.display = "block";
+  }
+
+  function hideMsg() {
+    msgEl.style.display = "none";
+  }
+
+  function coverOn() {
+    if (activeSlotIndex < 0) coverEl.style.display = "block";
+  }
+
+  function coverOff() {
+    coverEl.style.display = "none";
+  }
+
+  function readInt(key, fallback) {
+    var value = parseInt(localStorage.getItem(key) || "", 10);
+    return isNaN(value) ? fallback : value;
+  }
+
+  function readFloat(key, fallback) {
+    var value = parseFloat(localStorage.getItem(key) || "");
+    return isNaN(value) ? fallback : value;
+  }
+
+  function writeValue(key, value) {
+    try {
+      localStorage.setItem(key, String(value));
+    } catch (e) {}
+  }
+
+  function writeJSON(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {}
+  }
+
+  function readJSON(key) {
+    try {
+      return JSON.parse(localStorage.getItem(key) || "null");
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function clearPlaybackTimers() {
+    if (playTimer) {
+      clearTimeout(playTimer);
+      playTimer = null;
+    }
+
+    if (videoWatchTimer) {
+      clearInterval(videoWatchTimer);
+      videoWatchTimer = null;
+    }
+
+    if (videoHardTimer) {
+      clearTimeout(videoHardTimer);
+      videoHardTimer = null;
+    }
+  }
+
+  function clearTransitionTimer() {
+    if (transitionTimer) {
+      clearTimeout(transitionTimer);
+      transitionTimer = null;
+    }
+  }
+
+  function clearSlotEvents(slot) {
+    slot.img.onload = null;
+    slot.img.onerror = null;
+    slot.video.onloadedmetadata = null;
+    slot.video.oncanplay = null;
+    slot.video.onplaying = null;
+    slot.video.ontimeupdate = null;
+    slot.video.onended = null;
+    slot.video.onerror = null;
+    slot.video.onstalled = null;
+    slot.video.onwaiting = null;
+    slot.activateCallback = null;
+  }
+
+  function resetSlot(slotIndex) {
+    var slot = slots[slotIndex];
+
+    clearSlotEvents(slot);
+    slot.loadToken++;
+
+    try {
+      slot.video.pause();
+    } catch (e) {}
+
+    try {
+      slot.video.removeAttribute("src");
+      slot.video.load();
+    } catch (e) {}
+
+    try {
+      slot.img.removeAttribute("src");
+    } catch (e) {}
+
+    slot.img.style.display = "none";
+    slot.video.style.display = "none";
+    slot.root.className = "mediaSlot";
+    slot.item = null;
+    slot.sig = "";
+    slot.ready = false;
+    slot.failed = false;
+    slot.loading = false;
+  }
+
+  function resetAllSlots() {
+    resetSlot(0);
+    resetSlot(1);
+    activeSlotIndex = -1;
+  }
+
+  function safeArr(value) {
+    return Array.isArray(value) ? value : [];
+  }
+
+  function normalizeUrl(value) {
+    if (!value || typeof value !== "string") return "";
+    return value.replace(/^\s+|\s+$/g, "");
+  }
+
+  function dayKeyFromDate(date) {
+    return ["sun", "mon", "tue", "wed", "thu", "fri", "sat"][date.getDay()];
+  }
+
+  function minutesFromDate(date) {
+    return date.getHours() * 60 + date.getMinutes();
+  }
+
+  function parseHHMM(value) {
+    var parts;
+    var h;
+    var m;
+
+    if (!value || typeof value !== "string") return null;
+
+    parts = value.split(":");
+    if (parts.length < 2) return null;
+
+    h = parseInt(parts[0], 10);
+    m = parseInt(parts[1], 10);
+
+    if (isNaN(h) || isNaN(m)) return null;
+
+    return h * 60 + m;
+  }
+
+  function inRange(current, start, end) {
+    return current >= start && current < end;
+  }
+
+  function getActiveSlot(currentMinutes, slotConfig) {
+    var s;
+    var e;
+
+    if (!slotConfig) return null;
+
+    if (slotConfig.morning) {
+      s = parseHHMM(slotConfig.morning.start);
+      e = parseHHMM(slotConfig.morning.end);
+      if (s !== null && e !== null && inRange(currentMinutes, s, e)) return "morning";
+    }
+
+    if (slotConfig.noon) {
+      s = parseHHMM(slotConfig.noon.start);
+      e = parseHHMM(slotConfig.noon.end);
+      if (s !== null && e !== null && inRange(currentMinutes, s, e)) return "noon";
+    }
+
+    if (slotConfig.afternoon) {
+      s = parseHHMM(slotConfig.afternoon.start);
+      e = parseHHMM(slotConfig.afternoon.end);
+      if (s !== null && e !== null && inRange(currentMinutes, s, e)) return "afternoon";
+    }
+
+    return null;
+  }
+
+  function interleave(a, b) {
+    var out = [];
+    var i = 0;
+    var j = 0;
+
+    while (i < a.length || j < b.length) {
+      if (i < a.length) out.push(a[i++]);
+      if (j < b.length) out.push(b[j++]);
+    }
+
+    return out;
+  }
+
+  function normalizeItem(item) {
+    var src = item && normalizeUrl(item.src);
+
+    if (!src) return null;
+
+    return {
+      id: item.id || "",
+      type: item.type === "video" ? "video" : "image",
+      src: src,
+      duration: typeof item.duration === "number" && item.duration > 0 ? item.duration : IMAGE_DEFAULT_SECONDS,
+      fit: item.fit === "cover" ? "cover" : "contain"
+    };
+  }
+
+  function buildPlaylistFromSchedule(data) {
+    var now = new Date();
+    var dayKey = dayKeyFromDate(now);
+    var activeTimeSlot = getActiveSlot(minutesFromDate(now), data && data.slots);
+    var days = data && data.days ? data.days : {};
+    var dayBucket = days[dayKey] || null;
+    var allBucket = days.all || null;
+    var defaultBucket = data && data.default ? data.default : null;
+    var allDayList = [];
+    var slotList = [];
+    var mixed;
+    var fallback;
+    var out = [];
+    var i;
+    var item;
+
+    allDayList = allDayList
+      .concat(safeArr(allBucket && allBucket.allday))
+      .concat(safeArr(dayBucket && dayBucket.allday))
+      .concat(safeArr(defaultBucket && defaultBucket.allday));
+
+    if (activeTimeSlot) {
+      slotList = slotList
+        .concat(safeArr(allBucket && allBucket[activeTimeSlot]))
+        .concat(safeArr(dayBucket && dayBucket[activeTimeSlot]))
+        .concat(safeArr(defaultBucket && defaultBucket[activeTimeSlot]));
+    }
+
+    mixed = interleave(allDayList, slotList);
+
+    if (!mixed.length && dayBucket) {
+      fallback = []
+        .concat(safeArr(dayBucket.morning))
+        .concat(safeArr(dayBucket.noon))
+        .concat(safeArr(dayBucket.afternoon))
+        .concat(safeArr(dayBucket.allday));
+
+      mixed = fallback;
+    }
+
+    for (i = 0; i < mixed.length; i++) {
+      item = normalizeItem(mixed[i]);
+      if (item) out.push(item);
+    }
+
+    return out;
+  }
+
+  function itemSignature(item) {
+    return [
+      item.id || "",
+      item.type || "",
+      item.src || "",
+      item.duration || "",
+      item.fit || ""
+    ].join("|");
+  }
+
+  function playlistSignature(list) {
+    var out = [];
+    var i;
+
+    for (i = 0; i < list.length; i++) {
+      out.push(itemSignature(list[i]));
+    }
+
+    return out.join("||");
+  }
+
+  function savePlaylist(list, sig) {
+    writeJSON(KEY_PLAYLIST, list);
+    writeValue(KEY_SIG, sig);
+  }
+
+  function recordBoot() {
+    var log = readJSON(KEY_BOOT_LOG);
+    var now = Date.now();
+
+    if (!Array.isArray(log)) log = [];
+    log.push(now);
+    while (log.length > 12) log.shift();
+    writeJSON(KEY_BOOT_LOG, log);
+  }
+
+  function loadStoredPlaylist() {
+    var stored = readJSON(KEY_PLAYLIST);
+    var sig = localStorage.getItem(KEY_SIG) || "";
+    var currentIndex;
+    var currentSig;
+
+    if (!Array.isArray(stored) || !stored.length) return false;
+
+    playlist = stored;
+    playlistSig = sig || playlistSignature(stored);
+    currentIndex = readInt(KEY_CURRENT_INDEX, readInt(KEY_NEXT_INDEX, 0));
+
+    if (currentIndex < 0) currentIndex = 0;
+    if (currentIndex >= playlist.length) currentIndex = 0;
+
+    idx = currentIndex;
+    currentSig = localStorage.getItem(KEY_CURRENT_SIG) || "";
+    bootResumeInfo = {
+      index: currentIndex,
+      sig: currentSig,
+      startedAt: readInt(KEY_ITEM_STARTED_AT, 0),
+      videoTime: readFloat(KEY_VIDEO_TIME, 0)
+    };
+    return true;
+  }
+
+  function getBootResume(item) {
+    var info;
+    var sig;
+    var totalMs;
+    var elapsedMs;
+
+    if (bootResumeConsumed) return null;
+    bootResumeConsumed = true;
+    info = bootResumeInfo;
+    if (!info || info.index !== idx) return null;
+
+    sig = itemSignature(item);
+    if (!info.sig || info.sig !== sig) return null;
+
+    if (item.type === "video") {
+      return { videoTime: Math.max(0, Number(info.videoTime || 0)) };
+    }
+
+    totalMs = Math.max(1, item.duration || IMAGE_DEFAULT_SECONDS) * 1000;
+    elapsedMs = info.startedAt > 0 ? Date.now() - info.startedAt : 0;
+
+    if (elapsedMs > 0 && elapsedMs < totalMs + 5000) {
+      return { imageRemainingMs: Math.max(1000, totalMs - elapsedMs) };
+    }
+
+    return null;
+  }
+
+  function saveCurrentState(item, index) {
+    writeValue(KEY_CURRENT_INDEX, index);
+    writeValue(KEY_CURRENT_SIG, itemSignature(item));
+    writeValue(KEY_ITEM_STARTED_AT, Date.now());
+    writeValue(KEY_VIDEO_TIME, 0);
+    writeValue(KEY_NEXT_INDEX, index);
+    writeValue(KEY_LAST_START, Date.now());
+  }
+
+  function saveVideoTime(item, index, time) {
+    if (index !== idx || !item) return;
+    writeValue(KEY_CURRENT_INDEX, index);
+    writeValue(KEY_CURRENT_SIG, itemSignature(item));
+    writeValue(KEY_VIDEO_TIME, Math.max(0, Number(time || 0)).toFixed(2));
+  }
+
+  function getNextIndex() {
+    if (!playlist.length) return 0;
+    return (idx + 1) % playlist.length;
+  }
+
+  function nextItem() {
+    if (!playlist.length) {
+      playCurrent();
+      return;
+    }
+
+    idx = getNextIndex();
+    playCurrent();
+  }
+
+  function getStandbySlotIndex() {
+    if (activeSlotIndex === 0) return 1;
+    return 0;
+  }
+
+  function prepareSlot(slotIndex, item, warmOnly) {
+    var slot = slots[slotIndex];
+    var sig = itemSignature(item);
+    var token;
+
+    if (slot.sig === sig && slot.item && !slot.failed) {
+      return slot;
+    }
+
+    resetSlot(slotIndex);
+    slot = slots[slotIndex];
+    token = ++slot.loadToken;
+    slot.item = item;
+    slot.sig = sig;
+    slot.loading = true;
+    slot.failed = false;
+    slot.ready = false;
+
+    if (item.type === "image") {
+      slot.img.style.objectFit = item.fit === "cover" ? "cover" : "contain";
+      slot.img.style.display = "block";
+
+      slot.img.onload = function () {
+        if (token !== slot.loadToken || slot.sig !== sig) return;
+        slot.loading = false;
+        slot.ready = true;
+        if (typeof slot.activateCallback === "function") slot.activateCallback();
+      };
+
+      slot.img.onerror = function () {
+        if (token !== slot.loadToken || slot.sig !== sig) return;
+        slot.loading = false;
+        slot.failed = true;
+        if (typeof slot.activateCallback === "function") slot.activateCallback(new Error("No se pudo cargar la imagen"));
+      };
+
+      slot.img.src = item.src;
+      return slot;
+    }
+
+    slot.video.style.objectFit = item.fit === "cover" ? "cover" : "contain";
+    slot.video.style.display = "block";
+
+    try {
+      slot.video.loop = false;
+      slot.video.muted = true;
+      slot.video.autoplay = false;
+      slot.video.playsInline = true;
+      slot.video.preload = "auto";
+      slot.video.setAttribute("muted", "");
+      slot.video.setAttribute("playsinline", "");
+      slot.video.setAttribute("webkit-playsinline", "");
+    } catch (e) {}
+
+    slot.video.onloadedmetadata = function () {
+      if (token !== slot.loadToken || slot.sig !== sig) return;
+      slot.loading = false;
+    };
+
+    slot.video.oncanplay = function () {
+      if (token !== slot.loadToken || slot.sig !== sig) return;
+      slot.loading = false;
+      slot.ready = true;
+    };
+
+    slot.video.onerror = function () {
+      if (token !== slot.loadToken || slot.sig !== sig) return;
+      slot.loading = false;
+      slot.failed = true;
+      if (typeof slot.activateCallback === "function") slot.activateCallback(new Error("No se pudo cargar el video"));
+    };
+
+    slot.video.src = item.src;
+
+    try {
+      slot.video.load();
+    } catch (e) {}
+
+    return slot;
+  }
+
+  function activatePreparedImage(slotIndex, item, myGeneration, resume) {
+    var slot = slots[slotIndex];
+    var committed = false;
+
+    function finish(error) {
+      if (committed || myGeneration !== generation) return;
+
+      if (error || slot.failed) {
+        committed = true;
+        clearTransitionTimer();
+        slot.activateCallback = null;
+        transitionInProgress = false;
+        skipBrokenItem();
+        return;
+      }
+
+      if (!slot.ready) return;
+      committed = true;
+      clearTransitionTimer();
+      slot.activateCallback = null;
+      commitSlot(slotIndex, item, myGeneration, resume);
+    }
+
+    if (slot.ready) {
+      finish();
+      return;
+    }
+
+    slot.activateCallback = finish;
+    transitionTimer = setTimeout(function () {
+      finish(new Error("Tiempo de carga agotado"));
+    }, LOAD_TIMEOUT_MS);
+  }
+
+  function activatePreparedVideo(slotIndex, item, myGeneration, resume) {
+    var slot = slots[slotIndex];
+    var video = slot.video;
+    var committed = false;
+    var commitDelayTimer = null;
+    var requestedStart = resume && resume.videoTime > 0 ? Number(resume.videoTime) : 0;
+    var startApplied = false;
+
+    function clearCommitDelay() {
+      if (commitDelayTimer) {
+        clearTimeout(commitDelayTimer);
+        commitDelayTimer = null;
+      }
+    }
+
+    function fail() {
+      if (committed || myGeneration !== generation) return;
+      committed = true;
+      clearCommitDelay();
+      clearTransitionTimer();
+      transitionInProgress = false;
+      skipBrokenItem();
+    }
+
+    function commitAfterPaint() {
+      var t;
+
+      if (committed || myGeneration !== generation || commitDelayTimer) return;
+      t = Number(video.currentTime || 0);
+
+      if (video.readyState < 3) return;
+      if (requestedStart > 0) {
+        if (t < Math.max(0, requestedStart - 0.4)) return;
+      } else if (t < 0.06) {
+        return;
+      }
+
+      commitDelayTimer = setTimeout(function () {
+        if (committed || myGeneration !== generation) return;
+        committed = true;
+        clearTransitionTimer();
+        commitSlot(slotIndex, item, myGeneration, null);
+      }, VIDEO_FIRST_FRAME_DELAY_MS);
+    }
+
+    function startVideo() {
+      var d;
+
+      if (startApplied || myGeneration !== generation) return;
+      startApplied = true;
+      d = Number(video.duration || 0);
+
+      if (requestedStart > 0 && isFinite(d) && d > 1) {
+        requestedStart = Math.min(requestedStart, Math.max(0, d - 0.8));
+      }
+
+      try {
+        video.currentTime = requestedStart > 0 ? requestedStart : 0;
+      } catch (e) {}
+
+      try {
+        var p = video.play();
+        if (p && p.catch) p.catch(function () {});
+      } catch (e) {}
+    }
+
+    slot.activateCallback = function (error) {
+      if (error) fail();
+    };
+
+    video.onloadedmetadata = function () {
+      startVideo();
+    };
+    video.oncanplay = function () {
+      startVideo();
+      commitAfterPaint();
+    };
+    video.onplaying = commitAfterPaint;
+    video.ontimeupdate = commitAfterPaint;
+    video.onerror = fail;
+
+    transitionTimer = setTimeout(fail, LOAD_TIMEOUT_MS);
+
+    if (video.readyState >= 1) startVideo();
+  }
+
+  function commitSlot(slotIndex, item, myGeneration, resume) {
+    var oldIndex = activeSlotIndex;
+    var newSlot = slots[slotIndex];
+    var oldSlot = oldIndex >= 0 ? slots[oldIndex] : null;
+
+    if (myGeneration !== generation) return;
+
+    clearPlaybackTimers();
+    clearTransitionTimer();
+    transitionInProgress = false;
+    hideMsg();
+
+    newSlot.root.className = "mediaSlot active";
+    activeSlotIndex = slotIndex;
+    isPlaying = true;
+    saveCurrentState(item, idx);
+    coverOff();
+
+    if (oldSlot && oldIndex !== slotIndex) {
+      oldSlot.root.className = "mediaSlot";
+      setTimeout(function () {
+        if (activeSlotIndex !== oldIndex) resetSlot(oldIndex);
+      }, 320);
+    }
+
+    if (item.type === "image") {
+      var imageDurationMs = resume && resume.imageRemainingMs
+        ? Math.max(1000, Number(resume.imageRemainingMs))
+        : Math.max(1, item.duration || IMAGE_DEFAULT_SECONDS) * 1000;
+
+      if (resume && resume.imageRemainingMs) {
+        writeValue(KEY_ITEM_STARTED_AT, Date.now() - (Math.max(1, item.duration || IMAGE_DEFAULT_SECONDS) * 1000 - imageDurationMs));
+      }
+
+      playTimer = setTimeout(function () {
+        if (myGeneration === generation) nextItem();
+      }, imageDurationMs);
+    } else {
+      monitorActiveVideo(slotIndex, item, myGeneration);
+    }
+
+    setTimeout(preloadNextItem, 120);
+  }
+
+  function monitorActiveVideo(slotIndex, item, myGeneration) {
+    var slot = slots[slotIndex];
+    var video = slot.video;
+    var duration = Number(video.duration || 0);
+    var hardSeconds = VIDEO_HARD_MAX_SECONDS;
+    var lastSavedAt = 0;
+
+    lastVideoTime = Number(video.currentTime || 0);
+    lastVideoProgressAt = Date.now();
+    saveVideoTime(item, idx, lastVideoTime);
+
+    function finish() {
+      if (myGeneration !== generation || activeSlotIndex !== slotIndex) return;
+      nextItem();
+    }
+
+    function noteProgress() {
+      var now = Date.now();
+      var t = Number(video.currentTime || 0);
+
+      if (t > lastVideoTime + 0.015) {
+        lastVideoTime = t;
+        lastVideoProgressAt = now;
+      }
+
+      if (now - lastSavedAt > 1000) {
+        lastSavedAt = now;
+        saveVideoTime(item, idx, t);
+      }
+    }
+
+    video.onended = finish;
+    video.onerror = finish;
+    video.ontimeupdate = noteProgress;
+    video.onplaying = noteProgress;
+    video.onwaiting = function () {};
+    video.onstalled = function () {};
+
+    if (isFinite(duration) && duration > 0) {
+      hardSeconds = Math.min(
+        VIDEO_HARD_MAX_SECONDS,
+        Math.max(120, duration + Math.max(120, duration * 0.5))
+      );
+    }
+
+    videoHardTimer = setTimeout(finish, hardSeconds * 1000);
+
+    videoWatchTimer = setInterval(function () {
+      var now;
+      var t;
+      var d;
+      var stalledFor;
+
+      if (myGeneration !== generation || activeSlotIndex !== slotIndex) return;
+
+      now = Date.now();
+      t = Number(video.currentTime || 0);
+      d = Number(video.duration || 0);
+      noteProgress();
+
+      if (isFinite(d) && d > 0 && t >= d - 0.08) {
+        try { video.pause(); } catch (e) {}
+        finish();
+        return;
+      }
+
+      stalledFor = now - lastVideoProgressAt;
+
+      if (stalledFor > VIDEO_STALL_RETRY_MS) {
+        try {
+          var p = video.play();
+          if (p && p.catch) p.catch(function () {});
+        } catch (e) {}
+      }
+
+      if (stalledFor > VIDEO_STALL_SKIP_MS) {
+        finish();
+      }
+    }, 500);
+  }
+
+  function preloadNextItem() {
+    var nextIndex;
+    var next;
+    var standbyIndex;
+
+    if (!playlist.length || transitionInProgress) return;
+
+    nextIndex = getNextIndex();
+    next = playlist[nextIndex];
+    if (!next || !next.src) return;
+    if (next.type === "video" && !PRELOAD_NEXT_VIDEO) return;
+
+    standbyIndex = getStandbySlotIndex();
+    prepareSlot(standbyIndex, next, true);
+  }
+
+  function skipBrokenItem() {
+    if (!playlist.length) {
+      playCurrent();
+      return;
+    }
+
+    idx = getNextIndex();
+    setTimeout(playCurrent, 40);
+  }
+
+  function playCurrent() {
+    var item;
+    var myGeneration;
+    var standbyIndex;
+    var slot;
+    var resume;
+
+    generation++;
+    myGeneration = generation;
+    clearPlaybackTimers();
+    clearTransitionTimer();
+    transitionInProgress = true;
+
+    if (!playlist.length) {
+      transitionInProgress = false;
+      isPlaying = false;
+      resetAllSlots();
+      coverOff();
+      showMsg("MADISON · Sin contenidos.<small>Subí imágenes o videos desde el panel.</small>");
+      return;
+    }
+
+    hideMsg();
+    coverOn();
+
+    if (idx < 0) idx = 0;
+    if (idx >= playlist.length) idx = 0;
+
+    item = playlist[idx];
+
+    if (!item || !item.src) {
+      skipBrokenItem();
+      return;
+    }
+
+    resume = getBootResume(item);
+    standbyIndex = getStandbySlotIndex();
+    slot = prepareSlot(standbyIndex, item, false);
+
+    if (item.type === "video") {
+      activatePreparedVideo(standbyIndex, item, myGeneration, resume);
+    } else {
+      activatePreparedImage(standbyIndex, item, myGeneration, resume);
+    }
+  }
+
+  function applySchedule(data) {
+    var newPlaylist;
+    var newSig;
+    var oldSig = playlistSig;
+
+    schedule = data;
+    newPlaylist = buildPlaylistFromSchedule(data);
+    newSig = playlistSignature(newPlaylist);
+
+    if (!newPlaylist.length) {
+      playlist = [];
+      playlistSig = "";
+      savePlaylist([], "");
+      playCurrent();
+      return;
+    }
+
+    playlist = newPlaylist;
+    playlistSig = newSig;
+    savePlaylist(playlist, playlistSig);
+
+    if (newSig !== oldSig || (!isPlaying && !transitionInProgress)) {
+      idx = readInt(KEY_NEXT_INDEX, 0);
+      if (idx < 0 || idx >= playlist.length) idx = 0;
+      playCurrent();
+    }
+  }
+
+  function refresh() {
+    getJSON(API_URL, function (data) {
+      applySchedule(data);
+    }, function (error) {
+      if (playlist.length && !isPlaying && !transitionInProgress) {
+        playCurrent();
+        return;
+      }
+
+      if (!playlist.length && activeSlotIndex < 0) {
+        showMsg("No se pudo cargar la programación.<small>" + error + "</small>");
+      }
+    });
+  }
+
+  function getJSON(url, ok, fail) {
+    var xhr;
+    var finalUrl;
+
+    try {
+      xhr = new XMLHttpRequest();
+      finalUrl = url + (url.indexOf("?") >= 0 ? "&" : "?") + "ts=" + Date.now();
+      xhr.open("GET", finalUrl, true);
+      xhr.timeout = 15000;
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState !== 4) return;
+
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            ok(JSON.parse(xhr.responseText));
+          } catch (e) {
+            fail("JSON inválido");
+          }
+        } else {
+          fail("HTTP " + xhr.status);
+        }
+      };
+
+      xhr.ontimeout = function () {
+        fail("Tiempo de conexión agotado");
+      };
+
+      xhr.onerror = function () {
+        fail("Error de conexión");
+      };
+
+      xhr.send(null);
+    } catch (e) {
+      fail(String(e));
+    }
+  }
+
+  recordBoot();
+
+  if (loadStoredPlaylist()) {
+    playCurrent();
+  } else {
+    showMsg("Cargando contenidos…");
+  }
+
+  refresh();
+  setInterval(refresh, REFRESH_MS);
+
+  window.MADISON_DIAG = function () {
+    return {
+      bootLog: readJSON(KEY_BOOT_LOG) || [],
+      currentIndex: readInt(KEY_CURRENT_INDEX, -1),
+      currentSig: localStorage.getItem(KEY_CURRENT_SIG) || "",
+      videoTime: readFloat(KEY_VIDEO_TIME, 0),
+      playlistLength: playlist.length,
+      generation: generation
+    };
+  };
+})();
+</script>
+  <!-- v3: continuidad ante recargas, videos tolerantes a buffering y cambio después del primer fotograma. -->
+</body>
+</html>
