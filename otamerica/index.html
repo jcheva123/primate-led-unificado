@@ -510,6 +510,97 @@
       border-radius:999px;
       font-size:12px;
       font-weight:800;
+      color:#fff;
+      z-index:5;
+    }
+
+    /* Slideshow del Póster LED Modelo 1 */
+    .product-slideshow{
+      position:relative;
+      aspect-ratio:4/3;
+      overflow:hidden;
+    }
+
+    .product-slideshow img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:0;
+      transition:opacity .8s ease;
+    }
+
+    .product-slideshow img.active{
+      opacity:1;
+    }
+
+    .slideshow-dots{
+      position:absolute;
+      right:18px;
+      bottom:18px;
+      z-index:6;
+      display:flex;
+      gap:7px;
+    }
+
+    .slideshow-dots button{
+      width:9px;
+      height:9px;
+      padding:0;
+      border:0;
+      border-radius:50%;
+      background:rgba(255,255,255,.45);
+      cursor:pointer;
+      transition:.25s ease;
+    }
+
+    .slideshow-dots button.active{
+      background:#fff;
+      transform:scale(1.15);
+    }
+
+    /* Placeholder del Modelo 2 hasta contar con fotografía */
+    .model-placeholder{
+      min-height:430px;
+      border-radius:var(--radius);
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(circle at 22% 18%,rgba(37,214,232,.14),transparent 28%),
+        linear-gradient(145deg,#0e2136,#081522 72%);
+      box-shadow:var(--shadow);
+      display:flex;
+      align-items:flex-end;
+      padding:30px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .model-placeholder:before{
+      content:"02";
+      position:absolute;
+      right:24px;
+      top:10px;
+      font-family:Oswald,sans-serif;
+      font-size:150px;
+      line-height:1;
+      color:rgba(255,255,255,.035);
+    }
+
+    .model-placeholder small{
+      display:block;
+      color:var(--cyan);
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      margin-bottom:8px;
+    }
+
+    .model-placeholder strong{
+      display:block;
+      max-width:360px;
+      font-size:24px;
+      line-height:1.15;
     }
 
     .product-num{
@@ -641,8 +732,10 @@
 
     .real-unit img{
       width:100%;
-      height:240px;
-      object-fit:cover;
+      height:auto;
+      aspect-ratio:9/16;
+      object-fit:contain;
+      background:#f3f6f8;
     }
 
     .real-unit figcaption{
@@ -1379,12 +1472,23 @@
 
         <div class="product-media reveal">
 
-          <figure class="product-main-image">
+          <figure class="product-main-image product-slideshow" data-slideshow>
 
             <img
+              class="active"
               src="assets/images/poster-otamerica-1.webp"
-              alt="Poster LED modelo 1 en recepción OTAMERICA"
+              alt="Póster LED de pared aplicado a recepción OTAMERICA"
             >
+
+            <img
+              src="assets/images/poster-otamerica-2.webp"
+              alt="Póster LED de pared aplicado a comunicación de seguridad en OTAMERICA"
+            >
+
+            <div class="slideshow-dots" aria-label="Seleccionar simulación">
+              <button class="active" type="button" aria-label="Ver simulación 1"></button>
+              <button type="button" aria-label="Ver simulación 2"></button>
+            </div>
 
           </figure>
 
@@ -1479,18 +1583,12 @@
 
         <div class="product-media reveal">
 
-          <figure class="product-main-image">
-
-            <img
-              src="assets/images/poster-otamerica-2.webp"
-              alt="Poster LED modelo 2 con comunicación de seguridad en OTAMERICA"
-            >
-
-          </figure>
-
-          <span class="image-tag">
-            Aplicación HSSE · comunicación operativa
-          </span>
+          <div class="model-placeholder">
+            <div>
+              <small>Póster LED · Modelo 2</small>
+              <strong>Visualización del equipo en desarrollo.</strong>
+            </div>
+          </div>
 
         </div>
 
@@ -2306,6 +2404,36 @@
     document
       .querySelectorAll('.reveal')
       .forEach((element) => io.observe(element));
+
+
+    /* Slideshow automático del Póster LED Modelo 1 */
+    document.querySelectorAll('[data-slideshow]').forEach((slideshow) => {
+      const slides = [...slideshow.querySelectorAll('img')];
+      const dots = [...slideshow.querySelectorAll('.slideshow-dots button')];
+      let current = 0;
+      let timer;
+
+      const showSlide = (index) => {
+        current = (index + slides.length) % slides.length;
+        slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
+      };
+
+      const start = () => {
+        clearInterval(timer);
+        timer = setInterval(() => showSlide(current + 1), 4500);
+      };
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          showSlide(index);
+          start();
+        });
+      });
+
+      showSlide(0);
+      start();
+    });
 
   </script>
 
