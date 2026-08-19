@@ -711,8 +711,8 @@
 
     .totem-hero img{
       width:100%;
-      aspect-ratio:3/4;
-      object-fit:cover;
+      height:auto;
+      object-fit:contain;
     }
 
     .real-unit{
@@ -768,7 +768,20 @@
     .outdoor-grid{
       position:relative;
       z-index:2;
-      max-width:980px;
+      display:grid;
+      grid-template-columns:1.12fr .88fr;
+      gap:62px;
+      align-items:center;
+    }
+
+    .outdoor-media{
+      position:relative;
+    }
+
+    .outdoor-media .product-main-image img{
+      width:100%;
+      aspect-ratio:4/3;
+      object-fit:cover;
     }
 
     .outdoor-copy{
@@ -1673,8 +1686,8 @@
         <div class="totem-hero reveal">
 
           <img
-            src="assets/images/totem-otamerica.webp"
-            alt="Tótem LED OTAMERICA en recepción y espacios corporativos"
+            src="assets/images/totem-led-medidas.webp"
+            alt="Tótem LED OTAMERICA con medidas, formato vertical, actualización remota y pitch 1.8"
           >
 
         </div>
@@ -1703,7 +1716,7 @@
           <div class="chips">
 
             <span class="chip">
-              185 × 64 cm
+              192 × 64 cm
             </span>
 
             <span class="chip">
@@ -1789,12 +1802,23 @@
 
     <!-- =======================================================
          PANTALLA LED EXTERIOR
-         SIN IMÁGENES HASTA TENER MATERIAL CORRECTO
     ======================================================== -->
 
     <section class="section outdoor">
 
       <div class="container outdoor-grid">
+
+        <div class="outdoor-media reveal">
+          <figure class="product-main-image">
+            <img
+              src="assets/images/pantalla-led-exterior.webp"
+              alt="Pantalla LED exterior de 4 por 2 metros aplicada a instalaciones OTAMERICA"
+            >
+          </figure>
+          <span class="image-tag">
+            Simulación de pantalla exterior · 4 × 2 m
+          </span>
+        </div>
 
         <div class="product-copy outdoor-copy reveal">
 
