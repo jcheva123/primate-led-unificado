@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="#071722" name="theme-color"/>
+<title>Mercado del Puerto · Propuesta Poster LED | Primate LED</title>
+<meta content="Propuesta de 6 Poster LED para el Mercado del Puerto de Bahía Blanca: comunicación por sectores, contenidos compartidos y gestión centralizada." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Oswald:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root{
+      --ink:#071722;
+      --ink-2:#0b2432;
+      --paper:#f5f6f2;
+      --white:#ffffff;
+      --muted:#6f7c83;
+      --line:rgba(7,23,34,.13);
+      --blue:#1297b5;
+      --blue-2:#50c7d7;
+      --red:#d91f26;
+      --warm:#f0b05a;
+      --radius:28px;
+      --shadow:0 24px 70px rgba(2,18,28,.14);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:"Manrope",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+    img{display:block;width:100%}
+    a{color:inherit;text-decoration:none}
+    .wrap{width:min(1180px,calc(100% - 40px));margin:auto}
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
+    .eyebrow:before{content:"";width:28px;height:2px;background:currentColor;border-radius:20px}
+    .display{font-family:"Oswald",Impact,sans-serif;text-transform:uppercase;letter-spacing:-.025em;line-height:.95;margin:0}
+    .section{padding:96px 0}
+    .section-head{display:flex;justify-content:space-between;gap:40px;align-items:flex-end;margin-bottom:42px}
+    .section-head h2{font-size:clamp(38px,5vw,68px);max-width:760px}
+    .section-head p{max-width:460px;margin:0;color:#526169;font-size:16px}
+
+    .topbar{position:fixed;z-index:30;top:0;left:0;right:0;background:rgba(7,23,34,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08)}
+    .topbar .wrap{height:70px;display:flex;align-items:center;justify-content:space-between;gap:24px;color:#fff}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:auto;height:34px;display:block;filter:brightness(0) invert(1) opacity(.94)}
+    .led-tag{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:24px;padding:0 10px;border-radius:5px;background:var(--red);color:#fff;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;box-shadow:0 10px 22px rgba(217,31,38,.28)}
+    .proposal-tag{font-size:12px;color:rgba(255,255,255,.68);text-align:right}
+
+    .hero{min-height:760px;background:var(--ink);color:white;padding:140px 0 62px;position:relative;overflow:hidden}
+    .hero:before{content:"";position:absolute;width:720px;height:720px;border:1px solid rgba(80,199,215,.16);border-radius:50%;right:-240px;top:-220px;box-shadow:0 0 0 110px rgba(80,199,215,.035),0 0 0 240px rgba(80,199,215,.025)}
+    .hero-grid{display:grid;grid-template-columns:.96fr 1.04fr;align-items:center;gap:48px;position:relative}
+    .hero-copy h1{font-size:clamp(54px,7.2vw,104px);max-width:720px}
+    .hero-copy h1 em{font-style:normal;color:var(--blue-2)}
+    .hero-copy .lead{max-width:650px;font-size:20px;color:rgba(255,255,255,.74);margin:28px 0 30px}
+    .hero-stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+    .stat{border:1px solid rgba(255,255,255,.13);padding:15px 18px;border-radius:16px;min-width:122px;background:rgba(255,255,255,.035)}
+    .stat strong{font-family:"Oswald";font-size:28px;display:block;line-height:1}
+    .stat span{font-size:11px;color:rgba(255,255,255,.62);text-transform:uppercase;letter-spacing:.1em}
+    /* Poster LED del hero: misma construcción visual que la web original de Poster LED. */
+    .hero .device-stage {
+      min-height: 660px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      perspective: 1200px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+
+    .hero .halo {
+      position: absolute;
+      width: 420px;
+      height: 520px;
+      border-radius: 80px;
+      background: radial-gradient(circle, rgba(17,217,255,.24), rgba(255,51,79,.12), transparent 65%);
+      filter: blur(16px);
+      transform: rotate(-8deg);
+      animation: breathe 4.5s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(.96) rotate(-8deg); opacity: .7; }
+      50% { transform: scale(1.04) rotate(-8deg); opacity: 1; }
+    }
+
+    .hero .wall-device {
+      width: 344px;
+      height: 602px;
+      position: relative;
+      border-radius: 0;
+      padding: 0;
+      background: transparent;
+      transform: rotateY(-9deg) rotateX(1deg);
+      transform-style: preserve-3d;
+      filter: drop-shadow(15px 18px 18px rgba(0,0,0,.42));
+    }
+
+    /* Perfil lateral de 4 cm: el frente permanece completamente frameless. */
+    .hero .wall-device::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      right: -18px;
+      width: 18px;
+      height: calc(100% - 1px);
+      background: linear-gradient(90deg, #20283a 0%, #0b0f18 58%, #05070d 100%);
+      clip-path: polygon(0 0, 100% 1.1%, 100% 98.6%, 0 100%);
+      box-shadow: 7px 4px 14px rgba(0,0,0,.32);
+      z-index: -1;
+    }
+
+    .hero .wall-device::after {
+      content: "";
+      position: absolute;
+      left: 3px;
+      right: -13px;
+      bottom: -8px;
+      height: 8px;
+      background: linear-gradient(180deg, #111827, #05070d);
+      clip-path: polygon(0 0, 100% 0, 98.5% 100%, 1.5% 100%);
+      z-index: -1;
+      opacity: .9;
+    }
+
+    .hero .screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      overflow: hidden;
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(17,217,255,.18), transparent 20%),
+        radial-gradient(circle at 85% 15%, rgba(17, 217, 255, .28), transparent 30%),
+        radial-gradient(circle at 15% 10%, rgba(255, 51, 79, .2), transparent 34%),
+        #06101f;
+      border: 0;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.06),
+        0 0 24px rgba(17,217,255,.12);
+    }
+
+    .hero .screen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0, rgba(255,255,255,.08) 1px, transparent 1px, transparent 4px);
+      mix-blend-mode: screen;
+      opacity: .2;
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    .hero .screen-bar {
+      height: 78px;
+      padding: 15px 16px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.16);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .hero .screen-brand { font-size: 15px; font-weight: 950; letter-spacing: .08em; color: #e9fbff; text-transform: uppercase; }
+    .hero .screen-sub { font-size: 10px; color: #aab5cc; margin-top: 7px; text-transform: uppercase; font-weight: 800; letter-spacing: .08em; }
+    .hero .screen-time { font-size: 30px; line-height: 1; font-weight: 1000; text-shadow: 0 0 18px rgba(17,217,255,.36); }
+    .hero .screen-content {
+      height: calc(100% - 120px);
+      padding: 18px 18px 12px;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+    }
+    .hero .screen-kicker {
+      color: var(--slide-accent, #11d9ff);
+      font-size: 10px;
+      letter-spacing: .16em;
+      font-weight: 950;
+      text-transform: uppercase;
+      transition: color .35s ease;
+    }
+    .hero .visual-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 6px 2px 14px;
+    }
+    .hero .visual-stage::before {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: var(--slide-glow, rgba(17,217,255,.22));
+      filter: blur(34px);
+      opacity: .88;
+      transform: translateY(-18px);
+      transition: background .45s ease;
+    }
+    .hero .visual-emoji {
+      position: relative;
+      z-index: 2;
+      min-height: 132px;
+      display: grid;
+      place-items: center;
+      font-size: 92px;
+      line-height: 1;
+      filter: drop-shadow(0 16px 22px rgba(0,0,0,.26));
+      transform: translateZ(1px);
+      transition: opacity .28s ease, transform .28s ease;
+    }
+    .hero .screen-title {
+      position: relative;
+      z-index: 2;
+      max-width: 285px;
+      font-size: 39px;
+      font-weight: 1000;
+      letter-spacing: -.055em;
+      line-height: .94;
+      margin: 8px auto 10px;
+      text-transform: uppercase;
+      transition: opacity .28s ease, transform .28s ease;
+    }
+    .hero .visual-line {
+      position: relative;
+      z-index: 2;
+      max-width: 260px;
+      color: #d8e3ef;
+      font-size: 12px;
+      line-height: 1.25;
+      font-weight: 750;
+      transition: opacity .28s ease, transform .28s ease;
+    }
+    .hero .visual-chip {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      margin-top: 17px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      color: #06101f;
+      background: var(--slide-accent, #11d9ff);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      box-shadow: 0 7px 22px rgba(0,0,0,.18);
+      transition: background .35s ease, opacity .28s ease, transform .28s ease;
+    }
+    .hero .slide-dots {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      padding-top: 8px;
+    }
+    .hero .slide-dots i {
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.22);
+      transition: .3s ease;
+    }
+    .hero .slide-dots i.on {
+      width: 18px;
+      border-radius: 99px;
+      background: var(--slide-accent, #11d9ff);
+      box-shadow: 0 0 10px var(--slide-accent, #11d9ff);
+    }
+    .hero .screen.swapping .visual-emoji,
+    .hero .screen.swapping .screen-title,
+    .hero .screen.swapping .visual-line,
+    .hero .screen.swapping .visual-chip {
+      opacity: 0;
+      transform: translateY(7px) scale(.98);
+    }
+
+    .hero .screen-ticker {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(90deg, #3565ff, #11d9ff);
+      color: #06101f;
+      font-weight: 1000;
+      font-size: 14px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      overflow: hidden;
+      z-index: 5;
+    }
+
+    .hero .ticker-move { white-space: nowrap; animation: ticker 16s linear infinite; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    .concept{background:white}
+    .concept-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .sector{min-height:220px;padding:28px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,#fff,#f6f8f8);display:flex;flex-direction:column;justify-content:space-between;transition:.25s ease}
+    .sector:hover{transform:translateY(-5px);box-shadow:0 18px 44px rgba(5,30,44,.08)}
+    .sector .num{font-family:"Oswald";font-size:18px;color:var(--blue);letter-spacing:.08em}
+    .sector h3{font-family:"Oswald";font-size:30px;text-transform:uppercase;line-height:1.05;margin:26px 0 10px}
+    .sector p{font-size:13px;color:var(--muted);margin:0}
+    .sector.primary{background:var(--ink);color:white;border-color:var(--ink)}
+    .sector.primary p{color:rgba(255,255,255,.62)}
+    .sector.primary .num{color:var(--blue-2)}
+    .concept-foot{margin-top:22px;padding:20px 22px;border-radius:18px;background:#eaf4f6;color:#31515d;font-size:14px}
+
+    .how{background:#e9eef0}
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .step{padding:30px;background:white;border-radius:22px;box-shadow:0 8px 30px rgba(16,44,58,.05)}
+    .step b{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--ink);color:white;font-family:"Oswald";font-size:19px}
+    .step h3{margin:24px 0 8px;font-size:19px}
+    .step p{margin:0;color:var(--muted);font-size:14px}
+
+    .applied{background:var(--ink);color:white}
+    .applied .section-head p{color:rgba(255,255,255,.62)}
+    .mock-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .mock-card{position:relative;overflow:hidden;border-radius:24px;background:#17313e;min-height:330px;grid-column:span 6}
+    .mock-card:first-child{grid-column:1/-1;min-height:520px}
+    .mock-card img{width:100%;height:100%;object-fit:cover;opacity:.94;transition:transform .55s ease}
+    .mock-card:hover img{transform:scale(1.018)}
+    .mock-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,23,34,0) 48%,rgba(7,23,34,.72) 100%)}
+    .mock-label{position:absolute;left:22px;bottom:20px;z-index:4;text-shadow:0 3px 15px rgba(0,0,0,.42)}
+    .mock-label small{display:block;color:#8fe7f2;text-transform:uppercase;font-weight:800;letter-spacing:.1em;margin-bottom:5px}
+    .mock-label strong{font-size:18px}
+
+    .uses{background:white}
+    .use-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .use{padding:24px;border-radius:20px;border:1px solid var(--line);min-height:180px}
+    .use i{font-style:normal;font-size:24px;color:var(--blue)}
+    .use h3{font-size:16px;margin:24px 0 8px}
+    .use p{font-size:13px;color:var(--muted);margin:0}
+
+    .platform{background:#0d2a39;color:#fff}
+    .platform-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:48px;align-items:center}
+    .screen-ui{background:#f7f8f5;border-radius:24px;padding:16px;color:var(--ink);box-shadow:var(--shadow);transform:rotate(-1deg)}
+    .browser-bar{height:38px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #dae0df}
+    .browser-bar i{width:8px;height:8px;border-radius:50%;background:#bac5c8}.browser-bar i:first-child{background:var(--blue)}
+    .browser-bar span{font-size:10px;color:#829096;margin-left:8px}
+    .screen-body{padding:18px}
+    .screen-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    .screen-title strong{font-size:14px}.screen-title span{font-size:10px;color:#23876b;background:#dff3eb;padding:6px 8px;border-radius:20px}
+    .playlist{display:grid;gap:9px}
+    .row{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid #dfe5e4;border-radius:12px;background:white;font-size:11px}
+    .row b{font-size:12px}.row em{font-style:normal;color:#68767b;font-size:9px;text-transform:uppercase;letter-spacing:.07em}
+    .platform-copy h2{font-size:clamp(42px,5vw,70px);margin:14px 0 24px}
+    .platform-copy>p{color:rgba(255,255,255,.66);font-size:17px;max-width:610px}
+    .platform-points{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+    .platform-points div{padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;font-size:13px;color:rgba(255,255,255,.72)}
+    .platform-points strong{display:block;color:white;margin-bottom:4px}
+
+    .product{background:#f3f0e8}
+    .product-grid{display:grid;grid-template-columns:.88fr 1.12fr;gap:50px;align-items:start}
+    .product-copy h2{font-size:clamp(46px,5.5vw,78px);margin:14px 0 22px}
+    .product-copy p{color:#59676d;max-width:530px}
+    .specs{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+    .specs span{padding:10px 12px;border-radius:999px;background:white;border:1px solid var(--line);font-size:12px;font-weight:700}
+    .ref-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .ref-card{aspect-ratio:9/14;position:relative;overflow:hidden;border-radius:20px;background:linear-gradient(150deg,#17313e,#091822);border:1px solid rgba(7,23,34,.12)}
+    .ref-card img{width:100%;height:100%;object-fit:cover}
+    .ref-fallback{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:20px;color:white;background:radial-gradient(circle at 70% 20%,rgba(80,199,215,.22),transparent 42%)}
+    .ref-fallback:before{content:"";position:absolute;left:20%;top:14%;width:52%;aspect-ratio:9/16;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.04);box-shadow:0 22px 45px rgba(0,0,0,.28)}
+    .ref-fallback small{position:relative;color:var(--blue-2);text-transform:uppercase;letter-spacing:.1em;font-weight:800}
+    .ref-fallback strong{position:relative;margin-top:5px;font-size:15px}
+    .ref-card.has-image .ref-fallback{display:none}
+
+    .close{background:white;padding:92px 0 110px}
+    .close-panel{background:var(--ink);color:white;border-radius:30px;padding:55px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;position:relative;overflow:hidden}
+    .close-panel:after{content:"06";position:absolute;right:-10px;top:-55px;font-family:"Oswald";font-size:230px;color:rgba(255,255,255,.035)}
+    .close-panel h2{font-size:clamp(40px,5vw,70px);max-width:760px;position:relative;z-index:1}
+    .close-panel p{color:rgba(255,255,255,.63);max-width:670px;position:relative;z-index:1}
+    .signature{position:relative;z-index:2;text-align:right}
+    .signature-brand{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-bottom:10px}
+    .signature-brand img{width:auto;height:34px;filter:brightness(0) invert(1) opacity(.94)}
+    .signature p{margin:0;color:var(--blue-2);font-size:11px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+
+    footer{background:#06131c;color:rgba(255,255,255,.5);padding:28px 0;font-size:11px}
+    footer .wrap{display:flex;justify-content:space-between;gap:20px}
+
+    .reveal{opacity:0;transform:translateY(18px);transition:.65s ease}
+    .reveal.on{opacity:1;transform:none}
+
+    @media(max-width:900px){
+      .section{padding:72px 0}.section-head{display:block}.section-head p{margin-top:18px}
+      .hero{min-height:auto}.hero-grid,.platform-grid,.product-grid{grid-template-columns:1fr}.hero .device-stage{min-height:auto;padding-top:30px}
+      .concept-grid{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr}.use-grid{grid-template-columns:1fr 1fr}.mock-grid{grid-template-columns:1fr}.mock-card,.mock-card:first-child{grid-column:auto;min-height:320px}.mock-card:first-child{min-height:390px}.close-panel{grid-template-columns:1fr}.signature{text-align:left}
+    }
+    @media(max-width:620px){
+      .wrap{width:min(100% - 26px,1180px)}.topbar .wrap{height:62px}.proposal-tag{display:none}.brand img{height:28px}.led-tag{min-width:38px;height:22px;padding:0 9px;font-size:10px}.hero{padding-top:112px}.hero-copy h1{font-size:54px}.hero-copy .lead{font-size:17px}.hero .device-stage{min-height:auto;padding-top:30px}.hero .wall-device{transform:rotateY(-5deg) rotateX(1deg);width:min(344px,88vw);height:calc(min(344px,88vw) * 1.75);margin-right:14px}.hero .screen-title{font-size:29px}.hero-stats{display:grid;grid-template-columns:1fr 1fr}.concept-grid,.use-grid,.platform-points{grid-template-columns:1fr}.sector{min-height:180px}.mock-grid{grid-template-columns:1fr}.mock-card,.mock-card:first-child{grid-column:auto;min-height:240px}.mock-card:first-child{min-height:310px}.ref-grid{grid-template-columns:1fr 1fr}.ref-card:nth-child(3){display:none}.close-panel{padding:34px 26px}.signature-brand{justify-content:flex-start}.signature-brand img{height:28px}footer .wrap{display:block}footer span{display:block;margin-top:5px}
+    }
+  </style>
+</head>
+<body>
+<header class="topbar">
+<div class="wrap">
+<div class="brand"><img alt="Primate Animación" src="assets/primate-logo.png"/><span class="led-tag">LED</span></div>
+<div class="proposal-tag">Propuesta conceptual · Mercado del Puerto · Puerto de Bahía Blanca</div>
+</div>
+</header>
+<main>
+<section class="hero">
+<div class="wrap hero-grid">
+<div class="hero-copy reveal">
+<div class="eyebrow">Mercado del Puerto</div>
+<h1 class="display">Una red de <em>comunicación LED</em> dentro del mercado.</h1>
+<p class="lead"><strong>6 Poster LED de pared</strong> para productos, horarios y agenda del Mercado.</p>
+<div class="hero-stats">
+<div class="stat"><strong>6</strong><span>Poster LED</span></div>
+<div class="stat"><strong>9:16</strong><span>Formato vertical</span></div>
+<div class="stat"><strong>1</strong><span>Sistema central</span></div>
+<div class="stat"><strong>Online</strong><span>Gestión remota</span></div>
+</div>
+</div>
+<div aria-label="Demo visual del Poster LED de pared" class="device-stage">
+<div class="halo"></div>
+<div class="wall-device">
+<div class="screen">
+<div class="screen-bar">
+<div>
+<div class="screen-brand">Poster LED 9:16</div>
+<div class="screen-sub">online · programable · mural</div>
+</div>
+<div class="screen-time" id="mock-time">10:30</div>
+</div>
+<div class="screen-content">
+<div class="screen-kicker" id="mock-kicker">SECTOR</div>
+<div class="visual-stage">
+<div class="visual-emoji" id="mock-emoji" aria-hidden="true">🍅🥬</div>
+<div class="screen-title" id="mock-title">Frutas y verduras</div>
+<div class="visual-line" id="mock-main">Fresco · local · de estación</div>
+<div class="visual-chip" id="mock-label">Mercado del Puerto</div>
+</div>
+<div class="slide-dots" id="mock-dots" aria-hidden="true"></div>
+</div>
+<div class="screen-ticker"><div class="ticker-move">MERCADO DEL PUERTO · PRODUCTORES · GASTRONOMÍA · AGENDA CULTURAL · PASEO PORTUARIO · MERCADO DEL PUERTO · PRODUCTORES · GASTRONOMÍA · AGENDA CULTURAL · PASEO PORTUARIO · </div></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="section concept">
+<div class="wrap">
+<div class="section-head reveal">
+<div><div class="eyebrow">01 · Concepto</div><h2 class="display">Seis pantallas.<br/>Un solo mercado.</h2></div>
+<p>Cada Poster comunica los puestos cercanos. La ubicación final se ajusta luego del relevamiento del galpón.</p>
+</div>
+<div class="concept-grid">
+<article class="sector reveal"><span class="num">01</span><div><h3>Frutas &amp; verduras</h3><p>Productos de estación · productores · ofertas.</p></div></article>
+<article class="sector reveal"><span class="num">02</span><div><h3>Carnes · pescados · mariscos</h3><p>Productos destacados · disponibilidad · promociones.</p></div></article>
+<article class="sector reveal"><span class="num">03</span><div><h3>Embutidos · quesos</h3><p>Especialidades · combos · novedades.</p></div></article>
+<article class="sector reveal"><span class="num">04</span><div><h3>Gastronomía</h3><p>Foodtrucks · menús · platos del día.</p></div></article>
+<article class="sector reveal"><span class="num">05</span><div><h3>Emprendedores &amp; artesanías</h3><p>Productos · historias · redes · novedades.</p></div></article>
+<article class="sector primary reveal"><span class="num">06</span><div><h3>Mercado del Puerto</h3><p>Agenda cultural · información general · comunicación institucional.</p></div></article>
+</div>
+<div class="concept-foot reveal"><strong>Esquema flexible:</strong> cada pantalla puede compartir contenidos de varios sectores según su ubicación.</div>
+</div>
+</section>
+<section class="section how">
+<div class="wrap">
+<div class="section-head reveal">
+<div><div class="eyebrow">02 · Funcionamiento</div><h2 class="display">Simple para el visitante.<br/>Simple para gestionar.</h2></div>
+</div>
+<div class="steps">
+<article class="step reveal"><b>01</b><h3>Contenido por sector</h3><p>Cada pantalla alterna productos, promociones y productores cercanos.</p></article>
+<article class="step reveal"><b>02</b><h3>Información compartida</h3><p>Agenda, campañas o avisos generales pueden publicarse en las seis pantallas.</p></article>
+<article class="step reveal"><b>03</b><h3>Programación automática</h3><p>Los contenidos se cargan y programan previamente para cada jornada.</p></article>
+</div>
+</div>
+</section>
+<section class="section applied" id="simulaciones">
+<div class="wrap">
+<div class="section-head reveal">
+<div><div class="eyebrow">03 · Aplicado al lugar</div><h2 class="display">Así se integraría<br/>al recorrido.</h2></div>
+<p>Visualizaciones finales de cómo se integran los Poster LED en distintos sectores del galpón.</p>
+</div>
+<div class="mock-grid">
+<article class="mock-card reveal">
+<img alt="Vista general del galpón con seis Poster LED distribuidos en el Mercado del Puerto" src="assets/galpon-general.webp"/>
+<div class="mock-label"><small>Vista general</small><strong>6 Poster LED integrados al recorrido</strong></div>
+</article>
+<article class="mock-card reveal">
+<img alt="Poster LED integrado en el sector de frutas y verduras" src="assets/verduleria.webp"/>
+<div class="mock-label"><small>Frutas &amp; verduras</small><strong>Información junto al producto</strong></div>
+</article>
+<article class="mock-card reveal">
+<img alt="Poster LED integrado en el sector de carnes, pescados y mariscos" src="assets/carnes-pescados-mariscos.webp"/>
+<div class="mock-label"><small>Carnes · pescados · mariscos</small><strong>Contenido específico por sector</strong></div>
+</article>
+<article class="mock-card reveal">
+<img alt="Poster LED integrado en el sector gastronómico" src="assets/gastronomia.webp"/>
+<div class="mock-label"><small>Gastronomía</small><strong>Menús, propuestas y agenda</strong></div>
+</article>
+<article class="mock-card reveal">
+<img alt="Poster LED integrado en un sector de emprendimientos y productos" src="assets/emprendedores-retail.webp"/>
+<div class="mock-label"><small>Emprendedores</small><strong>Productos, novedades y promociones</strong></div>
+</article>
+</div>
+</div>
+</section>
+<section class="section uses">
+<div class="wrap">
+<div class="section-head reveal">
+<div><div class="eyebrow">04 · Contenidos</div><h2 class="display">Una pantalla.<br/>Muchos usos.</h2></div>
+<p>La comunicación puede cambiar según el horario, el fin de semana o una actividad especial.</p>
+</div>
+<div class="use-grid">
+<article class="use reveal"><i>01</i><h3>Productos &amp; promociones</h3><p>Precios destacados, combos, novedades y productos de estación.</p></article>
+<article class="use reveal"><i>02</i><h3>Productores</h3><p>Quién produce, origen, historia y formas de contacto.</p></article>
+<article class="use reveal"><i>03</i><h3>Agenda cultural</h3><p>Música, espectáculos, talleres y actividades para familias.</p></article>
+<article class="use reveal"><i>04</i><h3>Puerto de Bahía Blanca</h3><p>Campañas, información institucional y acciones comunitarias.</p></article>
+</div>
+</div>
+</section>
+<section class="section platform">
+<div class="wrap platform-grid">
+<div aria-label="Ejemplo de panel de gestión" class="screen-ui reveal">
+<div class="browser-bar"><i></i><i></i><i></i><span>panel.primate.ar · Mercado del Puerto</span></div>
+<div class="screen-body">
+<div class="screen-title"><strong>Poster 02 · Carnes / Pescados / Mariscos</strong><span>● Activo</span></div>
+<div class="playlist">
+<div class="row"><span>10:30</span><b>Bienvenida al Mercado</b><em>General</em></div>
+<div class="row"><span>11:00</span><b>Producto destacado</b><em>Sector</em></div>
+<div class="row"><span>13:00</span><b>Agenda del día</b><em>General</em></div>
+<div class="row"><span>15:30</span><b>Promoción productor</b><em>Sector</em></div>
+<div class="row"><span>17:30</span><b>Actividad cultural</b><em>General</em></div>
+</div>
+</div>
+</div>
+<div class="platform-copy reveal">
+<div class="eyebrow">05 · Gestión centralizada</div>
+<h2 class="display">Un sistema.<br/>Seis pantallas.</h2>
+<p>Las seis unidades se administran desde una misma plataforma, con contenido propio o compartido.</p>
+<div class="platform-points">
+<div><strong>Individual</strong>Contenido específico para cada sector.</div>
+<div><strong>General</strong>Una comunicación publicada en toda la red.</div>
+<div><strong>Programado</strong>Por día, horario y orden de reproducción.</div>
+<div><strong>Remoto</strong>Sin necesidad de actualizar pantalla por pantalla.</div>
+</div>
+</div>
+</div>
+</section>
+<section class="section product">
+<div class="wrap product-grid">
+<div class="product-copy reveal">
+<div class="eyebrow">06 · El producto</div>
+<h2 class="display">Poster LED<br/>de pared.</h2>
+<p>Pantalla mural vertical frameless, delgada y pensada para interior. Más integrada a la arquitectura que una TV convencional.</p>
+<div class="specs">
+<span>64 × 112 cm</span><span>Formato 9:16</span><span>4 cm profundidad</span><span>344 × 602 px</span><span>Gestión online</span>
+</div>
+<p style="margin-top:26px;font-size:13px"><strong>Espacio reservado:</strong> aquí sumaremos referencias reales del Poster LED ya instalado en otros ámbitos.</p>
+</div>
+<div class="ref-grid reveal">
+<article class="ref-card" id="ref1"><img alt="Poster LED instalado en otro ámbito" onerror="this.remove()" onload="this.parentElement.classList.add('has-image')" src="assets/poster-referencia-01.webp"/><div class="ref-fallback"><small>Referencia 01</small><strong>Retail / promociones</strong></div></article>
+<article class="ref-card" id="ref2"><img alt="Poster LED instalado en otro ámbito" onerror="this.remove()" onload="this.parentElement.classList.add('has-image')" src="assets/poster-referencia-02.webp"/><div class="ref-fallback"><small>Referencia 02</small><strong>Información / servicios</strong></div></article>
+<article class="ref-card" id="ref3"><img alt="Poster LED instalado en otro ámbito" onerror="this.remove()" onload="this.parentElement.classList.add('has-image')" src="assets/poster-referencia-03.webp"/><div class="ref-fallback"><small>Referencia 03</small><strong>Gastronomía / agenda</strong></div></article>
+</div>
+</div>
+</section>
+<section class="close">
+<div class="wrap">
+<div class="close-panel reveal">
+<div>
+<div class="eyebrow">Propuesta conceptual</div>
+<h2 class="display">6 puntos LED para comunicar mejor todo el Mercado.</h2>
+<p>Una red para ordenar la información, dar visibilidad a los productores y sumar un canal permanente de comunicación.</p>
+</div>
+<div class="signature"><div class="signature-brand"><img alt="Primate Animación" src="assets/primate-logo.png"/><span class="led-tag">LED</span></div><p>Tecnología visual · Bahía Blanca</p></div>
+</div>
+</div>
+</section>
+</main>
+<footer><div class="wrap"><strong>Primate LED · Propuesta Mercado del Puerto</strong><span>Documento web conceptual · Agosto 2026</span></div></footer>
+<script>
+    const slides = [
+      { kicker:'SECTOR', emoji:'🍅🥬', title:'Frutas y verduras', main:'Fresco · local · de estación', label:'Mercado del Puerto', accent:'#79d66f', glow:'rgba(121,214,111,.28)' },
+      { kicker:'SECTOR', emoji:'🥩', title:'Carnes', main:'Cortes frescos · productores', label:'Mercado del Puerto', accent:'#ff625b', glow:'rgba(255,98,91,.30)' },
+      { kicker:'SECTOR', emoji:'🐟🦐', title:'Pescados y mariscos', main:'Sabores del puerto', label:'Mercado del Puerto', accent:'#45c8ff', glow:'rgba(69,200,255,.30)' },
+      { kicker:'SECTOR', emoji:'🧀', title:'Embutidos y quesos', main:'Especialidades para llevar', label:'Mercado del Puerto', accent:'#ffc857', glow:'rgba(255,200,87,.30)' },
+      { kicker:'DÍAS Y HORARIOS', emoji:'🗓️', title:'Sábados y domingos', main:'10:30 — 18:30 hs', label:'Te esperamos', accent:'#b8ff59', glow:'rgba(184,255,89,.27)' },
+      { kicker:'AGENDA CULTURAL', emoji:'🎵🎭', title:'Este fin de semana', main:'Música en vivo · infantiles · talleres', label:'Actividades para disfrutar', accent:'#ff73c9', glow:'rgba(255,115,201,.28)' }
+    ];
+
+    let slideIndex = 0;
+    const posterScreen = document.querySelector('.hero .screen');
+    const dotsWrap = document.getElementById('mock-dots');
+
+    slides.forEach((_, i) => {
+      const dot = document.createElement('i');
+      if(i === 0) dot.classList.add('on');
+      dotsWrap.appendChild(dot);
+    });
+
+    function setSlide() {
+      const i = slideIndex % slides.length;
+      const s = slides[i];
+      posterScreen.classList.add('swapping');
+      setTimeout(() => {
+        document.getElementById('mock-kicker').textContent = s.kicker;
+        document.getElementById('mock-emoji').textContent = s.emoji;
+        document.getElementById('mock-title').textContent = s.title;
+        document.getElementById('mock-main').textContent = s.main;
+        document.getElementById('mock-label').textContent = s.label;
+        posterScreen.style.setProperty('--slide-accent', s.accent);
+        posterScreen.style.setProperty('--slide-glow', s.glow);
+        [...dotsWrap.children].forEach((dot, idx) => dot.classList.toggle('on', idx === i));
+        posterScreen.classList.remove('swapping');
+      }, 220);
+      slideIndex++;
+    }
+
+    function updateTime() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('mock-time').textContent = `${hh}:${mm}`;
+    }
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('on'); });
+    }, {threshold:.08});
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    updateTime();
+    setSlide();
+    setInterval(updateTime, 15000);
+    setInterval(setSlide, 4500);
+  </script>
+</body>
+</html>

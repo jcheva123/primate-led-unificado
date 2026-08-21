@@ -1,0 +1,9 @@
+MERCADO DEL PUERTO · WEB FINAL
+
+Contenido:
+- index.html
+- assets/ con las 5 imágenes finales optimizadas a WebP
+- logo Primate
+
+Para actualizar el sitio, subir index.html y la carpeta assets conservando la estructura.
+Las referencias antiguas poster-referencia-01/02/03.webp siguen apuntando a los assets existentes del proyecto original.
