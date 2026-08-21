@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#071722"/>
+  <title>Balcón al Mar · Propuesta Tótem LED Exterior | Primate LED</title>
+  <meta name="description" content="Propuesta conceptual de un tótem LED exterior para Balcón al Mar, Puerto de Bahía Blanca: contenidos dinámicos, información útil y gestión online."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --ink:#071722;
+      --ink-2:#0b2432;
+      --paper:#f5f6f2;
+      --white:#ffffff;
+      --muted:#6f7c83;
+      --line:rgba(7,23,34,.13);
+      --blue:#1297b5;
+      --blue-2:#50c7d7;
+      --port:#0754a0;
+      --port-2:#167fbd;
+      --red:#d91f26;
+      --warm:#f0b05a;
+      --radius:28px;
+      --shadow:0 24px 70px rgba(2,18,28,.14);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:"Manrope",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+    img{display:block;width:100%}
+    a{color:inherit;text-decoration:none}
+    .wrap{width:min(1180px,calc(100% - 40px));margin:auto}
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
+    .eyebrow:before{content:"";width:28px;height:2px;background:currentColor;border-radius:20px}
+    .display{font-family:"Oswald",Impact,sans-serif;text-transform:uppercase;letter-spacing:-.025em;line-height:.95;margin:0}
+    .section{padding:96px 0}
+    .section-head{display:flex;justify-content:space-between;gap:40px;align-items:flex-end;margin-bottom:42px}
+    .section-head h2{font-size:clamp(38px,5vw,68px);max-width:760px}
+    .section-head p{max-width:470px;margin:0;color:#526169;font-size:16px}
+
+    .topbar{position:fixed;z-index:30;top:0;left:0;right:0;background:rgba(7,23,34,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08)}
+    .topbar .wrap{height:70px;display:flex;align-items:center;justify-content:space-between;gap:24px;color:#fff}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:auto;height:34px;display:block;filter:brightness(0) invert(1) opacity(.94)}
+    .led-tag{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:24px;padding:0 10px;border-radius:5px;background:var(--red);color:#fff;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;box-shadow:0 10px 22px rgba(217,31,38,.28)}
+    .proposal-tag{font-size:12px;color:rgba(255,255,255,.68);text-align:right}
+
+    .hero{min-height:780px;background:var(--ink);color:white;padding:138px 0 62px;position:relative;overflow:hidden}
+    .hero:before{content:"";position:absolute;width:720px;height:720px;border:1px solid rgba(80,199,215,.16);border-radius:50%;right:-240px;top:-220px;box-shadow:0 0 0 110px rgba(80,199,215,.035),0 0 0 240px rgba(80,199,215,.025)}
+    .hero-grid{display:grid;grid-template-columns:.96fr 1.04fr;align-items:center;gap:48px;position:relative}
+    .hero-copy h1{font-size:clamp(54px,7.2vw,104px);max-width:740px}
+    .hero-copy h1 em{font-style:normal;color:var(--blue-2)}
+    .hero-copy .lead{max-width:650px;font-size:20px;color:rgba(255,255,255,.74);margin:28px 0 30px}
+    .hero-stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+    .stat{border:1px solid rgba(255,255,255,.13);padding:15px 18px;border-radius:16px;min-width:126px;background:rgba(255,255,255,.035)}
+    .stat strong{font-family:"Oswald";font-size:28px;display:block;line-height:1}
+    .stat span{font-size:11px;color:rgba(255,255,255,.62);text-transform:uppercase;letter-spacing:.1em}
+
+    /* Tótem del hero: misma lógica de perspectiva del ejemplo original, adaptada al producto exterior. */
+    .device-stage{min-height:670px;display:grid;place-items:center;position:relative;perspective:1300px}
+    .halo{position:absolute;width:440px;height:540px;border-radius:80px;background:radial-gradient(circle,rgba(17,217,255,.23),rgba(18,151,181,.12),transparent 67%);filter:blur(18px);transform:rotate(-8deg);animation:breathe 4.5s ease-in-out infinite}
+    @keyframes breathe{0%,100%{transform:scale(.96) rotate(-8deg);opacity:.72}50%{transform:scale(1.04) rotate(-8deg);opacity:1}}
+
+    .totem-device{width:326px;height:650px;position:relative;transform:rotateY(-9deg) rotateX(1deg);transform-style:preserve-3d;filter:drop-shadow(18px 24px 24px rgba(0,0,0,.44))}
+    .totem-device:before{content:"";position:absolute;top:3px;right:-22px;width:22px;height:calc(100% - 4px);background:linear-gradient(90deg,#78838a 0%,#3e484f 48%,#151a1e 100%);clip-path:polygon(0 0,100% 1.1%,100% 98.5%,0 100%);box-shadow:9px 4px 16px rgba(0,0,0,.32);z-index:-1}
+    .totem-device:after{content:"";position:absolute;left:8px;right:-15px;bottom:-10px;height:10px;background:linear-gradient(180deg,#4f5a61,#171d21);clip-path:polygon(0 0,100% 0,98.5% 100%,1.5% 100%);z-index:-1;opacity:.95}
+    .totem-face{height:100%;padding:12px;background:linear-gradient(90deg,#9fa9ae,#d5dade 40%,#8a9499 100%);border:1px solid rgba(255,255,255,.38);box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
+    .totem-screen{height:58%;background:#06101f;position:relative;overflow:hidden;border:4px solid #333c42;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 0 22px rgba(17,217,255,.12)}
+    .totem-screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.012);transition:opacity .55s ease,transform 5s ease}
+    .totem-screen img.on{opacity:1;transform:scale(1.045)}
+    .totem-screen:after{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0,rgba(255,255,255,.08) 1px,transparent 1px,transparent 4px);mix-blend-mode:screen;opacity:.12;pointer-events:none}
+    .screen-dots{position:absolute;right:12px;bottom:12px;z-index:4;display:flex;gap:5px}
+    .screen-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.34);transition:.25s ease}
+    .screen-dots i.on{width:18px;border-radius:99px;background:#fff}
+    .totem-base{height:42%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 20px;background:linear-gradient(160deg,#0b4d91,#0759a6 48%,#093d76);position:relative;overflow:hidden;color:#fff}
+    .totem-base:before,.totem-base:after{content:"";position:absolute;left:-10%;right:-10%;height:80px;border-radius:50%;border:1px solid rgba(113,196,235,.36)}
+    .totem-base:before{bottom:15px;transform:rotate(-5deg)}
+    .totem-base:after{bottom:-8px;transform:rotate(5deg)}
+    .totem-base strong{font-family:"Oswald";font-size:42px;line-height:.92;text-transform:uppercase;letter-spacing:-.02em;position:relative;z-index:2}
+    .totem-base .port-mark{width:118px;height:auto;margin-bottom:18px;position:relative;z-index:2;filter:drop-shadow(0 4px 8px rgba(0,0,0,.12))}
+    .totem-foot{height:20px;background:linear-gradient(90deg,#7c878d,#c5ccd0 50%,#707b80);box-shadow:inset 0 1px rgba(255,255,255,.35)}
+    .hero-note{position:absolute;bottom:12px;right:8px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.38)}
+
+    .story{background:white}
+    .story-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:42px;align-items:center}
+    .story-photo{border-radius:28px;overflow:hidden;box-shadow:var(--shadow);position:relative;min-height:470px}
+    .story-photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+    .story-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,rgba(7,23,34,.42))}
+    .story-copy h2{font-size:clamp(42px,5vw,74px);margin:14px 0 24px}
+    .story-copy p{color:#526169;font-size:16px;margin:0 0 16px}
+    .story-quote{margin-top:26px;padding:22px 24px;background:#eaf4f6;border-radius:18px;color:#31515d;font-size:14px;border-left:4px solid var(--blue)}
+
+    .concept{background:#e9eef0}
+    .concept-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .sector{min-height:220px;padding:28px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,#fff,#f6f8f8);display:flex;flex-direction:column;justify-content:space-between;transition:.25s ease}
+    .sector:hover{transform:translateY(-5px);box-shadow:0 18px 44px rgba(5,30,44,.08)}
+    .sector .num{font-family:"Oswald";font-size:18px;color:var(--blue);letter-spacing:.08em}
+    .sector h3{font-family:"Oswald";font-size:30px;text-transform:uppercase;line-height:1.05;margin:26px 0 10px}
+    .sector p{font-size:13px;color:var(--muted);margin:0}
+    .sector.primary{background:var(--ink);color:white;border-color:var(--ink)}
+    .sector.primary p{color:rgba(255,255,255,.62)}
+    .sector.primary .num{color:var(--blue-2)}
+
+    .applied{background:var(--ink);color:white}
+    .applied .section-head p{color:rgba(255,255,255,.62)}
+    .mock-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .mock-card{position:relative;overflow:hidden;border-radius:24px;background:#17313e;min-height:330px;grid-column:span 6}
+    .mock-card:first-child{grid-column:1/-1;min-height:560px}
+    .mock-card img{width:100%;height:100%;object-fit:cover;opacity:.96;transition:transform .55s ease}
+    .mock-card:hover img{transform:scale(1.018)}
+    .mock-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,23,34,0) 48%,rgba(7,23,34,.74) 100%)}
+    .mock-label{position:absolute;left:22px;bottom:20px;z-index:4;text-shadow:0 3px 15px rgba(0,0,0,.42)}
+    .mock-label small{display:block;color:#8fe7f2;text-transform:uppercase;font-weight:800;letter-spacing:.1em;margin-bottom:5px}
+    .mock-label strong{font-size:18px}
+
+    .content{background:white}
+    .content-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .content-card{border-radius:24px;overflow:hidden;border:1px solid var(--line);background:#fff;box-shadow:0 12px 34px rgba(16,44,58,.06)}
+    .content-card figure{margin:0;aspect-ratio:9/16;background:#0d2a39;overflow:hidden}
+    .content-card img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+    .content-card:hover img{transform:scale(1.018)}
+    .content-card div{padding:22px}
+    .content-card small{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--blue);font-weight:800}
+    .content-card h3{font-family:"Oswald";font-size:28px;text-transform:uppercase;margin:8px 0 8px;line-height:1}
+    .content-card p{font-size:13px;color:var(--muted);margin:0}
+
+    .platform{background:#0d2a39;color:#fff}
+    .platform-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:48px;align-items:center}
+    .screen-ui{background:#f7f8f5;border-radius:24px;padding:16px;color:var(--ink);box-shadow:var(--shadow);transform:rotate(-1deg)}
+    .browser-bar{height:38px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #dae0df}
+    .browser-bar i{width:8px;height:8px;border-radius:50%;background:#bac5c8}.browser-bar i:first-child{background:var(--blue)}
+    .browser-bar span{font-size:10px;color:#829096;margin-left:8px}
+    .screen-body{padding:18px}
+    .screen-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    .screen-title strong{font-size:14px}.screen-title span{font-size:10px;color:#23876b;background:#dff3eb;padding:6px 8px;border-radius:20px}
+    .playlist{display:grid;gap:9px}
+    .row{display:grid;grid-template-columns:50px 1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid #dfe5e4;border-radius:12px;background:white;font-size:11px}
+    .row b{font-size:12px}.row em{font-style:normal;color:#68767b;font-size:9px;text-transform:uppercase;letter-spacing:.07em}
+    .platform-copy h2{font-size:clamp(42px,5vw,70px);margin:14px 0 24px}
+    .platform-copy>p{color:rgba(255,255,255,.66);font-size:17px;max-width:610px}
+    .platform-points{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+    .platform-points div{padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;font-size:13px;color:rgba(255,255,255,.72)}
+    .platform-points strong{display:block;color:white;margin-bottom:4px}
+
+    .product{background:#f3f0e8}
+    .product-grid{display:grid;grid-template-columns:.88fr 1.12fr;gap:50px;align-items:start}
+    .product-copy h2{font-size:clamp(46px,5.5vw,78px);margin:14px 0 22px}
+    .product-copy p{color:#59676d;max-width:540px}
+    .specs{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+    .specs span{padding:10px 12px;border-radius:999px;background:white;border:1px solid var(--line);font-size:12px;font-weight:700}
+    .ref-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .ref-card{position:relative;overflow:hidden;border-radius:20px;background:linear-gradient(150deg,#17313e,#091822);border:1px solid rgba(7,23,34,.12);min-height:310px}
+    .ref-card img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+    .ref-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(7,23,34,.62))}
+    .ref-card span{position:absolute;z-index:2;left:16px;bottom:14px;color:white;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+
+    .real{background:white}
+    .real-grid{display:grid;grid-template-columns:.86fr 1.14fr;gap:44px;align-items:center}
+    .real-copy h2{font-size:clamp(42px,5vw,72px);margin:14px 0 22px}
+    .real-copy p{color:#59676d}
+    .real-photos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .real-photos figure{margin:0;border-radius:22px;overflow:hidden;background:#dde3e4;box-shadow:0 16px 42px rgba(7,23,34,.08)}
+    .real-photos img{width:100%;height:440px;object-fit:cover}
+
+    .close{background:white;padding:92px 0 110px}
+    .close-panel{background:var(--ink);color:white;border-radius:30px;padding:55px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;position:relative;overflow:hidden}
+    .close-panel:after{content:"01";position:absolute;right:-10px;top:-55px;font-family:"Oswald";font-size:230px;color:rgba(255,255,255,.035)}
+    .close-panel h2{font-size:clamp(40px,5vw,70px);max-width:800px;position:relative;z-index:1}
+    .close-panel p{color:rgba(255,255,255,.63);max-width:690px;position:relative;z-index:1}
+    .signature{position:relative;z-index:2;text-align:right}
+    .signature-brand{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-bottom:10px}
+    .signature-brand img{width:auto;height:34px;filter:brightness(0) invert(1) opacity(.94)}
+    .signature p{margin:0;color:var(--blue-2);font-size:11px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+
+    footer{background:#06131c;color:rgba(255,255,255,.5);padding:28px 0;font-size:11px}
+    footer .wrap{display:flex;justify-content:space-between;gap:20px}
+    .reveal{opacity:0;transform:translateY(18px);transition:.65s ease}
+    .reveal.on{opacity:1;transform:none}
+
+    @media(max-width:900px){
+      .section{padding:72px 0}.section-head{display:block}.section-head p{margin-top:18px}
+      .hero{min-height:auto}.hero-grid,.story-grid,.platform-grid,.product-grid,.real-grid{grid-template-columns:1fr}.device-stage{min-height:auto;padding-top:30px}
+      .concept-grid{grid-template-columns:1fr 1fr}.content-grid{grid-template-columns:1fr 1fr}.mock-grid{grid-template-columns:1fr}.mock-card,.mock-card:first-child{grid-column:auto;min-height:320px}.mock-card:first-child{min-height:390px}.real-photos img{height:360px}.close-panel{grid-template-columns:1fr}.signature{text-align:left}
+    }
+    @media(max-width:620px){
+      .wrap{width:min(100% - 26px,1180px)}.topbar .wrap{height:62px}.proposal-tag{display:none}.brand img{height:28px}.led-tag{min-width:38px;height:22px;padding:0 9px;font-size:10px}.hero{padding-top:112px}.hero-copy h1{font-size:54px}.hero-copy .lead{font-size:17px}.device-stage{min-height:auto;padding-top:30px}.totem-device{transform:rotateY(-5deg) rotateX(1deg);width:min(326px,82vw);height:calc(min(326px,82vw) * 1.99);margin-right:16px}.totem-base strong{font-size:35px}.hero-stats{display:grid;grid-template-columns:1fr 1fr}.concept-grid,.content-grid,.platform-points{grid-template-columns:1fr}.sector{min-height:180px}.mock-card,.mock-card:first-child{min-height:240px}.mock-card:first-child{min-height:310px}.ref-grid,.real-photos{grid-template-columns:1fr}.real-photos img{height:420px}.close-panel{padding:34px 26px}.signature-brand{justify-content:flex-start}.signature-brand img{height:28px}footer .wrap{display:block}footer span{display:block;margin-top:5px}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand"><img alt="Primate Animación" src="assets/primate-logo.png"/><span class="led-tag">LED</span></div>
+      <div class="proposal-tag">Propuesta conceptual · Balcón al Mar · Puerto de Bahía Blanca</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">Balcón al Mar</div>
+          <h1 class="display">Un nuevo punto de <em>comunicación LED</em> frente al puerto.</h1>
+          <p class="lead"><strong>Tótem LED exterior</strong> para acercar contenidos del estuario, información útil y comunicación portuaria a quienes recorren el Balcón al Mar.</p>
+          <div class="hero-stats">
+            <div class="stat"><strong>2 m</strong><span>Altura total</span></div>
+            <div class="stat"><strong>P2.5</strong><span>Alta luminosidad</span></div>
+            <div class="stat"><strong>64 × 112</strong><span>Pantalla cm</span></div>
+            <div class="stat"><strong>Online</strong><span>Gestión remota</span></div>
+          </div>
+        </div>
+
+        <div class="device-stage" aria-label="Demo visual del tótem LED exterior">
+          <div class="halo"></div>
+          <div class="totem-device">
+            <div class="totem-face">
+              <div class="totem-screen" id="hero-screen">
+                <img class="on" src="assets/poster-fauna-flamenco.png" alt="Contenido de fauna: Flamenco Austral"/>
+                <img src="assets/poster-fauna-cisne.png" alt="Contenido de fauna: Cisne Coscoroba"/>
+                <img src="assets/poster-mareas-mapa.png" alt="Contenido de mareas y ubicación"/>
+                <div class="screen-dots" id="screen-dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+              </div>
+              <div class="totem-base">
+                <img class="port-mark" src="assets/puerto-logo-white.png" alt="Puerto Bahía Blanca"/>
+                <strong>Balcón<br/>al Mar</strong>
+              </div>
+              <div class="totem-foot"></div>
+            </div>
+          </div>
+          <div class="hero-note">Simulación conceptual</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section story">
+      <div class="wrap story-grid">
+        <div class="story-photo reveal"><img src="assets/balcon-al-mar.webp" alt="Visitantes recorriendo el Balcón al Mar del Puerto de Bahía Blanca"/></div>
+        <div class="story-copy reveal">
+          <div class="eyebrow">01 · El lugar</div>
+          <h2 class="display">Una vista privilegiada del puerto whitense.</h2>
+          <p>Ubicado en el ex Muelle de Hierro, entre las plantas de Cargill y Terminal Bahía Blanca, el Balcón al Mar facilita el contacto y el acercamiento de los vecinos con la realidad operativa y el paisaje portuario.</p>
+          <p>Es un punto de encuentro con el estuario y, al mismo tiempo, una ventana directa a la actividad de una estación marítima emblemática para la historia de la ciudad.</p>
+          <div class="story-quote"><strong>La propuesta:</strong> sumar un soporte digital permanente que acompañe el recorrido sin competir con el paisaje, ampliando la información disponible en el lugar.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section concept">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><div class="eyebrow">02 · Concepto</div><h2 class="display">Un tótem.<br/>Tres capas de contenido.</h2></div>
+          <p>El formato vertical permite alternar piezas visuales pensadas para una lectura rápida en exterior y actualizar la información de forma remota.</p>
+        </div>
+        <div class="concept-grid">
+          <article class="sector reveal"><span class="num">01</span><div><h3>Fauna &amp; estuario</h3><p>Especies del entorno, identificación visual y datos breves para acompañar la visita.</p></div></article>
+          <article class="sector reveal"><span class="num">02</span><div><h3>Mareas &amp; ubicación</h3><p>Información útil del día, referencia geográfica y lectura simple del entorno costero.</p></div></article>
+          <article class="sector primary reveal"><span class="num">03</span><div><h3>Puerto &amp; comunidad</h3><p>Campañas, novedades, actividades e información institucional del Puerto de Bahía Blanca.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section applied" id="simulaciones">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><div class="eyebrow">03 · Aplicado al lugar</div><h2 class="display">Así se integraría<br/>al Balcón al Mar.</h2></div>
+          <p>Visualizaciones de la ubicación propuesta junto al paseo, manteniendo escala, perspectiva y lectura del paisaje.</p>
+        </div>
+        <div class="mock-grid">
+          <article class="mock-card reveal"><img src="assets/render-1-amplio.png" alt="Vista amplia del tótem LED en Balcón al Mar"/><div class="mock-label"><small>Vista general</small><strong>Integrado al recorrido y próximo a la baranda</strong></div></article>
+          <article class="mock-card reveal"><img src="assets/render-2-amplio.png" alt="Segunda vista amplia del tótem LED en Balcón al Mar"/><div class="mock-label"><small>Segundo ángulo</small><strong>Lectura clara sin perder el paisaje portuario</strong></div></article>
+          <article class="mock-card reveal"><img src="assets/render-1-corto.png" alt="Vista cercana del tótem LED exterior"/><div class="mock-label"><small>Detalle</small><strong>Pantalla vertical + base institucional</strong></div></article>
+          <article class="mock-card reveal"><img src="assets/render-2-corto.png" alt="Segunda vista cercana del tótem LED exterior"/><div class="mock-label"><small>Implantación</small><strong>Escala peatonal y presencia permanente</strong></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section content">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><div class="eyebrow">04 · Contenidos</div><h2 class="display">La pantalla cambia.<br/>El sistema es el mismo.</h2></div>
+          <p>Las piezas pueden rotar automáticamente y actualizarse según el momento del día, la temporada o una necesidad puntual de comunicación.</p>
+        </div>
+        <div class="content-grid">
+          <article class="content-card reveal"><figure><img src="assets/poster-fauna-flamenco.png" alt="Pieza vertical sobre Flamenco Austral"/></figure><div><small>Fauna del estuario</small><h3>Flamenco Austral</h3><p>Contenido visual de alto impacto, nombre de la especie y datos breves de interpretación.</p></div></article>
+          <article class="content-card reveal"><figure><img src="assets/poster-fauna-cisne.png" alt="Pieza vertical sobre Cisne Coscoroba"/></figure><div><small>Fauna del estuario</small><h3>Cisne Coscoroba</h3><p>Una segunda pieza de la misma familia gráfica para construir una secuencia de contenidos.</p></div></article>
+          <article class="content-card reveal"><figure><img src="assets/poster-mareas-mapa.png" alt="Pieza vertical con mareas y mapa"/></figure><div><small>Información útil</small><h3>Mareas &amp; mapa</h3><p>Datos prácticos, estado del entorno y ubicación, presentados con lectura rápida en formato vertical.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section platform">
+      <div class="wrap platform-grid">
+        <div class="screen-ui reveal" aria-label="Ejemplo de panel de gestión">
+          <div class="browser-bar"><i></i><i></i><i></i><span>panel.primate.ar · Balcón al Mar</span></div>
+          <div class="screen-body">
+            <div class="screen-title"><strong>Tótem 01 · Balcón al Mar</strong><span>● Activo</span></div>
+            <div class="playlist">
+              <div class="row"><span>10:00</span><b>Fauna · Flamenco Austral</b><em>Estuario</em></div>
+              <div class="row"><span>10:20</span><b>Mareas y condiciones</b><em>Dinámico</em></div>
+              <div class="row"><span>10:40</span><b>Fauna · Cisne Coscoroba</b><em>Estuario</em></div>
+              <div class="row"><span>11:00</span><b>Información del Puerto</b><em>Institucional</em></div>
+              <div class="row"><span>11:20</span><b>Mapa · Estás acá</b><em>Servicio</em></div>
+            </div>
+          </div>
+        </div>
+        <div class="platform-copy reveal">
+          <div class="eyebrow">05 · Gestión online</div>
+          <h2 class="display">Contenido dinámico.<br/>Actualización remota.</h2>
+          <p>El tótem se administra online para cambiar piezas, programar horarios y mantener vigente la información sin intervenir físicamente la unidad.</p>
+          <div class="platform-points">
+            <div><strong>Programado</strong>Contenidos por día, horario y orden de reproducción.</div>
+            <div><strong>Dinámico</strong>Información que puede renovarse cuando sea necesario.</div>
+            <div><strong>Remoto</strong>Actualización online desde un único panel de gestión.</div>
+            <div><strong>Flexible</strong>Fauna, mareas, mapas, campañas o comunicación institucional.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section product">
+      <div class="wrap product-grid">
+        <div class="product-copy reveal">
+          <div class="eyebrow">06 · El producto</div>
+          <h2 class="display">Tótem LED<br/>de exterior.</h2>
+          <p>Estructura de acero inoxidable de 2 metros de altura, diseñada para exterior y pensada para funcionar como soporte permanente de información digital en el paseo.</p>
+          <div class="specs">
+            <span>2 m de altura</span><span>Acero inoxidable</span><span>LED pitch 2.5</span><span>Alta luminosidad</span><span>64 × 112 cm</span><span>Formato vertical</span><span>Gestión online</span>
+          </div>
+          <p style="margin-top:26px;font-size:13px"><strong>Configuración propuesta:</strong> pantalla LED en el sector superior y placa rígida institucional en la parte inferior, con identidad de Balcón al Mar.</p>
+        </div>
+        <div class="ref-grid reveal">
+          <article class="ref-card"><img src="assets/render-1-corto.png" alt="Render frontal del tótem propuesto"/><span>Render propuesto · frente</span></article>
+          <article class="ref-card"><img src="assets/render-2-corto.png" alt="Render del tótem propuesto desde otro ángulo"/><span>Render propuesto · segundo ángulo</span></article>
+          <article class="ref-card"><img src="assets/render-1-amplio.png" alt="Render amplio del tótem propuesto"/><span>Integración · vista amplia</span></article>
+          <article class="ref-card"><img src="assets/render-2-amplio.png" alt="Segundo render amplio del tótem propuesto"/><span>Integración · vista amplia</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section real">
+      <div class="wrap real-grid">
+        <div class="real-copy reveal">
+          <div class="eyebrow">07 · Referencia real</div>
+          <h2 class="display">Una solución ya instalada en exterior.</h2>
+          <p>Como referencia constructiva y de escala, se toma la instalación real de un tótem LED exterior en la plaza principal de Punta Alta.</p>
+          <p>La propuesta para Balcón al Mar conserva la lógica de estructura robusta y pantalla vertical, adaptando completamente la gráfica inferior y los contenidos a la identidad del Puerto de Bahía Blanca.</p>
+        </div>
+        <div class="real-photos reveal">
+          <figure><img src="assets/totem-punta-alta-1.png" alt="Tótem LED exterior instalado en Punta Alta"/></figure>
+          <figure><img src="assets/totem-punta-alta-2.jpeg" alt="Segunda vista del tótem LED exterior instalado en Punta Alta"/></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="close">
+      <div class="wrap">
+        <div class="close-panel reveal">
+          <div>
+            <div class="eyebrow">Propuesta conceptual</div>
+            <h2 class="display">Un punto digital para mirar, entender y acercarse al puerto.</h2>
+            <p>El tótem suma una capa de información al Balcón al Mar: contenidos visuales, datos útiles y comunicación institucional, en un soporte exterior integrado al paseo.</p>
+          </div>
+          <div class="signature"><div class="signature-brand"><img alt="Primate Animación" src="assets/primate-logo.png"/><span class="led-tag">LED</span></div><p>Tecnología visual · Bahía Blanca</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><strong>Primate LED · Propuesta Balcón al Mar</strong><span>Documento web conceptual · Agosto 2026</span></div></footer>
+
+  <script>
+    const heroSlides = [...document.querySelectorAll('#hero-screen > img')];
+    const heroDots = [...document.querySelectorAll('#screen-dots i')];
+    let heroIndex = 0;
+    function setHeroSlide(next){
+      heroIndex = next % heroSlides.length;
+      heroSlides.forEach((img,i)=>img.classList.toggle('on',i===heroIndex));
+      heroDots.forEach((dot,i)=>dot.classList.toggle('on',i===heroIndex));
+    }
+    setInterval(()=>setHeroSlide(heroIndex+1),4200);
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('on'); });
+    }, {threshold:.08});
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
