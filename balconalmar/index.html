@@ -177,6 +177,27 @@
     .location-card figcaption{position:absolute;left:14px;bottom:14px;padding:8px 10px;border-radius:10px;background:rgba(7,23,34,.82);backdrop-filter:blur(8px);color:white;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
     .paseo-note{margin-top:18px;color:#6b777c;font-size:12px}
 
+    /* Paseo Portuario: ubicación principal de la propuesta */
+    .paseo-primary{padding-top:108px;padding-bottom:108px}
+    .paseo-primary .section-head{margin-bottom:50px}
+    .paseo-primary .section-head h2{font-size:clamp(50px,6.2vw,86px);max-width:880px}
+    .paseo-primary .section-head p{font-size:17px;max-width:500px}
+    .paseo-primary .location-grid{grid-template-columns:1fr 1fr}
+
+    .place-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .place-card{overflow:hidden;border-radius:24px;background:#f7f8f6;border:1px solid var(--line);box-shadow:0 12px 34px rgba(16,44,58,.05)}
+    .place-photo{aspect-ratio:16/10;overflow:hidden;background:#dce4e7}
+    .place-photo img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+    .place-card:hover .place-photo img{transform:scale(1.018)}
+    .place-body{padding:24px}
+    .place-body small{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--blue);font-weight:800}
+    .place-body h3{font-family:"Oswald";font-size:30px;text-transform:uppercase;line-height:1.02;margin:9px 0 10px}
+    .place-body p{font-size:14px;color:var(--muted);margin:0}
+    .story>.wrap>.story-quote{margin-top:20px}
+
+    .mock-grid.two-only .mock-card,
+    .mock-grid.two-only .mock-card:first-child{grid-column:span 6;min-height:430px}
+
     .close{background:white;padding:92px 0 110px}
     .close-panel{background:var(--ink);color:white;border-radius:30px;padding:55px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;position:relative;overflow:hidden}
     .close-panel:after{content:"02";position:absolute;right:-10px;top:-55px;font-family:"Oswald";font-size:230px;color:rgba(255,255,255,.035)}
@@ -195,10 +216,10 @@
     @media(max-width:900px){
       .section{padding:72px 0}.section-head{display:block}.section-head p{margin-top:18px}
       .hero{min-height:auto}.hero-grid,.story-grid,.platform-grid,.product-grid,.real-grid,.paseo-layout{grid-template-columns:1fr}.device-stage{min-height:auto;padding-top:30px}
-      .concept-grid{grid-template-columns:1fr 1fr}.content-grid{grid-template-columns:1fr 1fr}.mock-grid{grid-template-columns:1fr}.mock-card,.mock-card:first-child{grid-column:auto;min-height:320px}.mock-card:first-child{min-height:390px}.real-photos img{height:360px}.close-panel{grid-template-columns:1fr}.signature{text-align:left}
+      .concept-grid{grid-template-columns:1fr 1fr}.content-grid{grid-template-columns:1fr 1fr}.place-grid{grid-template-columns:1fr}.mock-grid{grid-template-columns:1fr}.mock-card,.mock-card:first-child,.mock-grid.two-only .mock-card,.mock-grid.two-only .mock-card:first-child{grid-column:auto;min-height:320px}.real-photos img{height:360px}.close-panel{grid-template-columns:1fr}.signature{text-align:left}
     }
     @media(max-width:620px){
-      .wrap{width:min(100% - 26px,1180px)}.topbar .wrap{height:62px}.proposal-tag{display:none}.brand img{height:28px}.led-tag{min-width:38px;height:22px;padding:0 9px;font-size:10px}.hero{padding-top:112px}.hero-copy h1{font-size:54px}.hero-copy .lead{font-size:17px}.device-stage{min-height:auto;padding-top:30px}.totem-device{transform:rotateY(-5deg) rotateX(1deg);width:min(326px,82vw);height:calc(min(326px,82vw) * 1.99);margin-right:16px}.totem-base strong{font-size:35px}.hero-stats{display:grid;grid-template-columns:1fr 1fr}.concept-grid,.content-grid,.platform-points{grid-template-columns:1fr}.sector{min-height:180px}.mock-card,.mock-card:first-child{min-height:240px}.mock-card:first-child{min-height:310px}.ref-grid,.real-photos,.location-grid{grid-template-columns:1fr}.real-photos img{height:420px}.close-panel{padding:34px 26px}.signature-brand{justify-content:flex-start}.signature-brand img{height:28px}footer .wrap{display:block}footer span{display:block;margin-top:5px}
+      .wrap{width:min(100% - 26px,1180px)}.topbar .wrap{height:62px}.proposal-tag{display:none}.brand img{height:28px}.led-tag{min-width:38px;height:22px;padding:0 9px;font-size:10px}.hero{padding-top:112px}.hero-copy h1{font-size:54px}.hero-copy .lead{font-size:17px}.device-stage{min-height:auto;padding-top:30px}.totem-device{transform:rotateY(-5deg) rotateX(1deg);width:min(326px,82vw);height:calc(min(326px,82vw) * 1.99);margin-right:16px}.totem-base strong{font-size:35px}.hero-stats{display:grid;grid-template-columns:1fr 1fr}.concept-grid,.content-grid,.place-grid{grid-template-columns:1fr}.sector{min-height:180px}.mock-card,.mock-card:first-child,.mock-grid.two-only .mock-card,.mock-grid.two-only .mock-card:first-child{min-height:240px}.ref-grid,.real-photos,.location-grid{grid-template-columns:1fr}.real-photos img{height:420px}.close-panel{padding:34px 26px}.signature-brand{justify-content:flex-start}.signature-brand img{height:28px}footer .wrap{display:block}footer span{display:block;margin-top:5px}
     }
   </style>
 </head>
@@ -206,7 +227,7 @@
   <header class="topbar">
     <div class="wrap">
       <div class="brand"><img loading="lazy" decoding="async" alt="Primate Animación" src="assets/primate-logo.webp"/><span class="led-tag">LED</span></div>
-      <div class="proposal-tag">Propuesta conceptual · Balcón al Mar + Paseo Portuario · Puerto de Bahía Blanca</div>
+      <div class="proposal-tag">Propuesta conceptual · Paseo Portuario + Balcón al Mar · Puerto de Bahía Blanca</div>
     </div>
   </header>
 
@@ -216,7 +237,7 @@
         <div class="hero-copy reveal">
           <div class="eyebrow">Puerto de Bahía Blanca</div>
           <h1 class="display">Dos puntos de <em>comunicación LED</em> en el recorrido portuario.</h1>
-          <p class="lead"><strong>Dos tótems LED exterior</strong> para Balcón al Mar y Paseo Portuario, con contenidos dinámicos, información útil y comunicación portuaria.</p>
+          <p class="lead"><strong>Dos tótems LED exterior</strong> para Paseo Portuario y Balcón al Mar, con contenidos dinámicos, información útil y comunicación portuaria.</p>
           <div class="hero-stats">
             <div class="stat"><strong>2</strong><span>Puntos propuestos</span></div>
             <div class="stat"><strong>P2.5</strong><span>Alta luminosidad</span></div>
@@ -247,18 +268,66 @@
       </div>
     </section>
 
-    <section class="section story">
-      <div class="wrap story-grid">
-        <div class="story-photo reveal"><img loading="lazy" decoding="async" src="assets/balcon-al-mar.webp" alt="Visitantes recorriendo el Balcón al Mar del Puerto de Bahía Blanca"/></div>
-        <div class="story-copy reveal">
-          <div class="eyebrow">01 · El lugar</div>
-          <h2 class="display">Una vista privilegiada del puerto whitense.</h2>
-          <p>Ubicado en el ex Muelle de Hierro, entre las plantas de Cargill y Terminal Bahía Blanca, el Balcón al Mar facilita el contacto y el acercamiento de los vecinos con la realidad operativa y el paisaje portuario.</p>
-          <p>Es un punto de encuentro con el estuario y, al mismo tiempo, una ventana directa a la actividad de una estación marítima emblemática para la historia de la ciudad.</p>
-          <div class="story-quote"><strong>La propuesta:</strong> sumar un soporte digital permanente que acompañe el recorrido sin competir con el paisaje, ampliando la información disponible en el lugar.</div>
+    <section class="section paseo paseo-primary" id="paseo-portuario">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <div class="eyebrow">Propuesta principal · Paseo Portuario</div>
+            <h2 class="display">Un punto LED<br/>en el Paseo Portuario.</h2>
+          </div>
+          <p>La ubicación prioritaria de la propuesta: una unidad exterior integrada a uno de los espacios de encuentro y recorrido del Puerto de Bahía Blanca.</p>
+        </div>
+        <div class="paseo-layout">
+          <div class="paseo-copy reveal">
+            <h3>Tecnología integrada al paseo.</h3>
+            <p>El Paseo Portuario forma parte del programa Ciudad Puerto y funciona como un espacio recreativo y educativo conectado con el paisaje y la actividad portuaria.</p>
+            <p>Sus zonas de descanso, iluminación, mobiliario y cartelería exterior permiten sumar un soporte digital permanente para información, contenidos institucionales y comunicación con los visitantes.</p>
+            <div class="specs">
+              <span>2 m de altura</span><span>LED pitch 2.5</span><span>64 × 112 cm</span><span>Alta luminosidad</span><span>Gestión online</span>
+            </div>
+            <div class="story-quote"><strong>Propuesta prioritaria:</strong> instalar un tótem LED exterior en el Paseo Portuario, con contenidos dinámicos y una implantación que mantenga la lectura del espacio y del paisaje.</div>
+            <a class="source-link" href="https://puertobahiablanca.com/novedades/paseo-y-libro-portuario.html" target="_blank" rel="noopener noreferrer">Referencia oficial · Paseo Portuario ↗</a>
+            <p class="paseo-note">La ubicación definitiva se define luego del relevamiento técnico y de circulación del sector.</p>
+          </div>
+          <div class="location-grid reveal">
+            <figure class="location-card"><img loading="lazy" decoding="async" src="assets/paseo-portuario-ubicacion-1.webp" alt="Primera ubicación posible para tótem LED exterior en el Paseo Portuario"/><figcaption>Ubicación propuesta 01</figcaption></figure>
+            <figure class="location-card"><img loading="lazy" decoding="async" src="assets/paseo-portuario-ubicacion-2.webp" alt="Segunda ubicación posible para tótem LED exterior en el Paseo Portuario"/><figcaption>Ubicación propuesta 02</figcaption></figure>
+          </div>
         </div>
       </div>
     </section>
+
+    <section class="section story">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <div class="eyebrow">01 · El lugar</div>
+            <h2 class="display">Dos espacios.<br/>Un mismo recorrido portuario.</h2>
+          </div>
+          <p>Paseo Portuario y Balcón al Mar funcionan como dos puntos complementarios para acercar a la comunidad al paisaje, la historia y la actividad del Puerto de Bahía Blanca.</p>
+        </div>
+        <div class="place-grid">
+          <article class="place-card reveal">
+            <div class="place-photo"><img loading="lazy" decoding="async" src="assets/paseo-portuario-ubicacion-1.webp" alt="Paseo Portuario del Puerto de Bahía Blanca"/></div>
+            <div class="place-body">
+              <small>Paseo Portuario</small>
+              <h3>Recorrido, encuentro e información.</h3>
+              <p>Un espacio recreativo y educativo dentro del programa Ciudad Puerto, pensado para vincular el paseo público con el entorno y la actividad portuaria.</p>
+            </div>
+          </article>
+          <article class="place-card reveal">
+            <div class="place-photo"><img loading="lazy" decoding="async" src="assets/balcon-al-mar.webp" alt="Visitantes recorriendo el Balcón al Mar del Puerto de Bahía Blanca"/></div>
+            <div class="place-body">
+              <small>Balcón al Mar</small>
+              <h3>Una ventana directa al estuario.</h3>
+              <p>Ubicado en el ex Muelle de Hierro, entre Cargill y Terminal Bahía Blanca, permite acercarse a la realidad operativa y al paisaje portuario desde un punto privilegiado.</p>
+            </div>
+          </article>
+        </div>
+        <div class="story-quote reveal"><strong>Una propuesta común:</strong> sumar soportes digitales exteriores que acompañen ambos espacios y permitan comunicar contenidos del estuario, información útil y mensajes institucionales.</div>
+      </div>
+    </section>
+
 
     <section class="section concept">
       <div class="wrap">
@@ -278,16 +347,15 @@
       <div class="wrap">
         <div class="section-head reveal">
           <div><div class="eyebrow">03 · Aplicado al lugar</div><h2 class="display">Así se integraría<br/>al Balcón al Mar.</h2></div>
-          <p>Visualizaciones de la ubicación propuesta junto al paseo, manteniendo escala, perspectiva y lectura del paisaje.</p>
+          <p>Dos visualizaciones de la ubicación propuesta junto al paseo, manteniendo escala, perspectiva y lectura del paisaje.</p>
         </div>
-        <div class="mock-grid">
+        <div class="mock-grid two-only">
           <article class="mock-card reveal"><img loading="lazy" decoding="async" src="assets/render-1-amplio.webp" alt="Vista amplia del tótem LED en Balcón al Mar"/><div class="mock-label"><small>Vista general</small><strong>Integrado al recorrido y próximo a la baranda</strong></div></article>
           <article class="mock-card reveal"><img loading="lazy" decoding="async" src="assets/render-2-amplio.webp" alt="Segunda vista amplia del tótem LED en Balcón al Mar"/><div class="mock-label"><small>Segundo ángulo</small><strong>Lectura clara sin perder el paisaje portuario</strong></div></article>
-          <article class="mock-card reveal"><img loading="lazy" decoding="async" src="assets/render-1-corto.webp" alt="Vista cercana del tótem LED exterior"/><div class="mock-label"><small>Detalle</small><strong>Pantalla vertical + base institucional</strong></div></article>
-          <article class="mock-card reveal"><img loading="lazy" decoding="async" src="assets/render-2-corto.webp" alt="Segunda vista cercana del tótem LED exterior"/><div class="mock-label"><small>Implantación</small><strong>Escala peatonal y presencia permanente</strong></div></article>
         </div>
       </div>
     </section>
+
 
     <section class="section content">
       <div class="wrap">
@@ -303,93 +371,17 @@
       </div>
     </section>
 
-    <section class="section platform">
-      <div class="wrap platform-grid">
-        <div class="screen-ui reveal" aria-label="Ejemplo de panel de gestión">
-          <div class="browser-bar"><i></i><i></i><i></i><span>panel.primate.ar · Balcón al Mar</span></div>
-          <div class="screen-body">
-            <div class="screen-title"><strong>Red exterior · 2 tótems</strong><span>● Activa</span></div>
-            <div class="playlist">
-              <div class="row"><span>10:00</span><b>Fauna · Flamenco Austral</b><em>Estuario</em></div>
-              <div class="row"><span>10:20</span><b>Mareas y condiciones</b><em>Dinámico</em></div>
-              <div class="row"><span>10:40</span><b>Fauna · Cisne Coscoroba</b><em>Estuario</em></div>
-              <div class="row"><span>11:00</span><b>Información del Puerto</b><em>Institucional</em></div>
-              <div class="row"><span>11:20</span><b>Mapa · Estás acá</b><em>Servicio</em></div>
-            </div>
-          </div>
-        </div>
-        <div class="platform-copy reveal">
-          <div class="eyebrow">05 · Gestión online</div>
-          <h2 class="display">Un sistema.<br/>Dos tótems.</h2>
-          <p>Ambas unidades se administran online para cambiar piezas, programar horarios y mantener vigente la información sin intervenir físicamente los equipos.</p>
-          <div class="platform-points">
-            <div><strong>Programado</strong>Contenidos por día, horario y orden de reproducción.</div>
-            <div><strong>Dinámico</strong>Información que puede renovarse cuando sea necesario.</div>
-            <div><strong>Remoto</strong>Actualización online desde un único panel de gestión.</div>
-            <div><strong>Multiunidad</strong>Contenido individual o compartido entre Balcón al Mar y Paseo Portuario.</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section product">
-      <div class="wrap product-grid">
-        <div class="product-copy reveal">
-          <div class="eyebrow">06 · El producto</div>
-          <h2 class="display">Tótem LED<br/>de exterior.</h2>
-          <p>Estructura de acero inoxidable de 2 metros de altura, diseñada para exterior y pensada para funcionar como soporte permanente de información digital en el paseo.</p>
-          <div class="specs">
-            <span>2 m de altura</span><span>Acero inoxidable</span><span>LED pitch 2.5</span><span>Alta luminosidad</span><span>64 × 112 cm</span><span>Formato vertical</span><span>Gestión online</span>
-          </div>
-          <p style="margin-top:26px;font-size:13px"><strong>Configuración propuesta:</strong> pantalla LED en el sector superior y placa rígida institucional en la parte inferior, con identidad de Balcón al Mar.</p>
-        </div>
-        <div class="ref-grid reveal">
-          <article class="ref-card"><img loading="lazy" decoding="async" src="assets/render-1-corto.webp" alt="Render frontal del tótem propuesto"/><span>Render propuesto · frente</span></article>
-          <article class="ref-card"><img loading="lazy" decoding="async" src="assets/render-2-corto.webp" alt="Render del tótem propuesto desde otro ángulo"/><span>Render propuesto · segundo ángulo</span></article>
-          <article class="ref-card"><img loading="lazy" decoding="async" src="assets/render-1-amplio.webp" alt="Render amplio del tótem propuesto"/><span>Integración · vista amplia</span></article>
-          <article class="ref-card"><img loading="lazy" decoding="async" src="assets/render-2-amplio.webp" alt="Segundo render amplio del tótem propuesto"/><span>Integración · vista amplia</span></article>
-        </div>
-      </div>
-    </section>
-
     <section class="section real">
       <div class="wrap real-grid">
         <div class="real-copy reveal">
-          <div class="eyebrow">07 · Referencia real</div>
+          <div class="eyebrow">05 · Referencia real</div>
           <h2 class="display">Una solución ya instalada en exterior.</h2>
           <p>Como referencia constructiva y de escala, se toma la instalación real de un tótem LED exterior en la plaza principal de Punta Alta.</p>
-          <p>La propuesta para Balcón al Mar conserva la lógica de estructura robusta y pantalla vertical, adaptando completamente la gráfica inferior y los contenidos a la identidad del Puerto de Bahía Blanca.</p>
+          <p>La propuesta para Paseo Portuario y Balcón al Mar conserva la lógica de estructura robusta y pantalla vertical, adaptando la gráfica y los contenidos a la identidad del Puerto de Bahía Blanca.</p>
         </div>
         <div class="real-photos reveal">
           <figure><img loading="lazy" decoding="async" src="assets/totem-punta-alta-1.webp" alt="Tótem LED exterior instalado en Punta Alta"/></figure>
           <figure><img loading="lazy" decoding="async" src="assets/totem-punta-alta-2.webp" alt="Segunda vista del tótem LED exterior instalado en Punta Alta"/></figure>
-        </div>
-      </div>
-    </section>
-
-
-    <section class="section paseo" id="paseo-portuario">
-      <div class="wrap">
-        <div class="section-head reveal">
-          <div><div class="eyebrow">08 · Nueva ubicación</div><h2 class="display">Otro punto LED<br/>en el Paseo Portuario.</h2></div>
-          <p>La propuesta se amplía con una segunda unidad exterior en otro espacio público del Puerto de Bahía Blanca.</p>
-        </div>
-        <div class="paseo-layout">
-          <div class="paseo-copy reveal">
-            <h3>Un segundo punto dentro del recorrido portuario.</h3>
-            <p>El Paseo Portuario forma parte del programa Ciudad Puerto y funciona como un espacio recreativo y educativo que vincula el Balcón al Mar con la plazoleta portuaria.</p>
-            <p>Sus zonas de descanso, iluminación, mobiliario y cartelería exterior lo convierten en un lugar natural para sumar información digital y comunicación institucional.</p>
-            <div class="specs">
-              <span>2 m de altura</span><span>LED pitch 2.5</span><span>64 × 112 cm</span><span>Alta luminosidad</span><span>Gestión online</span>
-            </div>
-            <div class="story-quote"><strong>Mismo sistema, nuevo punto:</strong> la unidad puede reproducir contenido propio del Paseo Portuario o compartir campañas y piezas con Balcón al Mar desde la misma plataforma.</div>
-            <a class="source-link" href="https://puertobahiablanca.com/novedades/paseo-y-libro-portuario.html" target="_blank" rel="noopener noreferrer">Referencia oficial · Paseo Portuario ↗</a>
-            <p class="paseo-note">La ubicación definitiva se define luego del relevamiento técnico y de circulación del sector.</p>
-          </div>
-          <div class="location-grid reveal">
-            <figure class="location-card"><img loading="lazy" decoding="async" src="assets/paseo-portuario-ubicacion-1.webp" alt="Primera ubicación posible para tótem LED exterior en el Paseo Portuario"/><figcaption>Ubicación posible 01</figcaption></figure>
-            <figure class="location-card"><img loading="lazy" decoding="async" src="assets/paseo-portuario-ubicacion-2.webp" alt="Segunda ubicación posible para tótem LED exterior en el Paseo Portuario"/><figcaption>Ubicación posible 02</figcaption></figure>
-          </div>
         </div>
       </div>
     </section>
@@ -400,7 +392,7 @@
           <div>
             <div class="eyebrow">Propuesta conceptual</div>
             <h2 class="display">Dos puntos digitales para mirar, entender y acercarse al puerto.</h2>
-            <p>Balcón al Mar y Paseo Portuario pueden funcionar como una pequeña red de comunicación exterior: contenidos visuales, datos útiles e información institucional gestionados desde un mismo sistema.</p>
+            <p>Paseo Portuario y Balcón al Mar pueden funcionar como una pequeña red de comunicación exterior: contenidos visuales, datos útiles e información institucional gestionados desde un mismo sistema.</p>
           </div>
           <div class="signature"><div class="signature-brand"><img loading="lazy" decoding="async" alt="Primate Animación" src="assets/primate-logo.webp"/><span class="led-tag">LED</span></div><p>Tecnología visual · Bahía Blanca</p></div>
         </div>
