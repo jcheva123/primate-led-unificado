@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080808"><title>Primate LED | Especificaciones de contenidos para tótems</title><style>
+    :root{
+      --bg:#080808;
+      --card:rgba(20,20,20,.94);
+      --text:#ffffff;
+      --muted:#bdbdbd;
+      --line:rgba(255,255,255,.15);
+      --accent:#ef353f;
+      --accent-light:#ff8288;
+      --ok:#51db91;
+      --warning:#ffd36b;
+    }
+
+    *{box-sizing:border-box}
+    html{color-scheme:dark}
+    body{
+      min-height:100vh;
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 16% 0%,rgba(255,255,255,.08),transparent 34%),
+        radial-gradient(circle at 86% 16%,rgba(239,53,63,.09),transparent 36%),
+        linear-gradient(145deg,#080808 0%,#111111 58%,#1b1b1b 100%);
+      background-attachment:fixed;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:980px;margin:0 auto;padding:22px 18px 38px}
+
+    .hero{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+      padding:18px;
+      margin-bottom:14px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(12,12,12,.82);
+      box-shadow:0 16px 42px rgba(0,0,0,.30);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+    }
+
+    .brand{display:flex;align-items:center;gap:15px;min-width:0}
+    .brandLogo{
+      width:190px;
+      height:72px;
+      flex:0 0 auto;
+      object-fit:contain;
+      background:#000;
+      padding:6px 10px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.20);
+      box-shadow:0 12px 28px rgba(0,0,0,.36);
+    }
+
+    h1{font-size:25px;line-height:1.12;margin:0}
+    h2{font-size:17px;margin:0 0 10px}
+    h3{font-size:14px;margin:0 0 7px}
+    p,li{color:var(--muted);line-height:1.55}
+    p{margin:8px 0}
+    b,strong{color:var(--text)}
+    ul{margin:8px 0;padding-left:21px}
+
+    .subtitle{margin:6px 0 0;color:var(--muted);font-size:14px}
+    .actions{display:flex;gap:9px;flex-wrap:wrap}
+    .btn{
+      min-height:43px;
+      padding:11px 15px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.20);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      text-decoration:none;
+      font-weight:850;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:none;
+    }
+    .btn.main{
+      border-color:var(--accent-light);
+      background:var(--accent);
+      color:#0b0b0b;
+      box-shadow:0 8px 22px rgba(0,0,0,.30);
+    }
+
+    .card{
+      padding:17px;
+      margin:12px 0;
+      border:1px solid var(--line);
+      border-radius:19px;
+      background:var(--card);
+      box-shadow:0 14px 38px rgba(0,0,0,.28);
+      backdrop-filter:blur(11px);
+      -webkit-backdrop-filter:blur(11px);
+    }
+
+    .lead{font-size:15px;color:#f1f1f1;margin:0}
+
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      padding:7px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.09);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--muted);
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .steps{
+      counter-reset:step;
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:grid;
+      gap:10px;
+    }
+    .steps li{
+      counter-increment:step;
+      position:relative;
+      min-height:50px;
+      margin:0;
+      padding:13px 13px 13px 53px;
+      border:1px solid var(--line);
+      border-radius:15px;
+      background:rgba(255,255,255,.045);
+    }
+    .steps li:before{
+      content:counter(step);
+      position:absolute;
+      left:13px;
+      top:12px;
+      width:28px;
+      height:28px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      color:#0b0b0b;
+      font-weight:900;
+      background:var(--accent);
+      box-shadow:0 5px 13px rgba(0,0,0,.25);
+    }
+
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .mini{
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:15px;
+      background:rgba(255,255,255,.04);
+    }
+    .mini p,.mini ul{margin-bottom:0}
+
+    .notice{border-left:4px solid var(--warning);background:rgba(255,211,107,.08)}
+    .success{border-left:4px solid var(--ok);background:rgba(81,219,145,.07)}
+
+    .route{
+      display:inline-block;
+      padding:3px 7px;
+      border-radius:8px;
+      background:rgba(255,255,255,.09);
+      color:#fff;
+      font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+      font-size:12px;
+    }
+
+    .footer{padding:8px 4px 0;text-align:center;color:rgba(255,255,255,.68);font-size:12px}
+
+    @media(max-width:760px){
+      .grid2{grid-template-columns:1fr}
+      .wrap{padding:16px 13px 28px}
+      .hero{padding:14px;align-items:flex-start}
+      .brandLogo{width:150px;height:58px;border-radius:14px}
+      h1{font-size:21px}
+      .actions{width:100%}
+      .actions .btn{flex:1 1 auto}
+    }
+  
+.brandmark{font-size:27px;font-weight:950;line-height:.95;letter-spacing:-1px;padding-right:22px;border-right:1px solid var(--line)}.brandmark span{display:block;color:var(--accent);font-size:21px;letter-spacing:2px;margin-top:5px}.overview{display:grid;grid-template-columns:1fr 230px;gap:32px;align-items:center}.label{font-size:12px;text-transform:uppercase;letter-spacing:1.6px;color:var(--accent-light);font-weight:800}.resolution{font-size:clamp(32px,6vw,54px);font-weight:900;line-height:1.2;margin:10px 0}.screen{width:150px;aspect-ratio:1/2;margin:10px auto;background:linear-gradient(150deg,#40161b,#111 60%);border:2px solid #ef353f;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 0 35px #ef353f18;position:relative}.screen:before{content:'';position:absolute;inset:12px;border:1px dashed #ffffff35}.screen strong{font-size:32px;line-height:1.1}.screen small{color:#bbb;margin-top:16px}.caption{text-align:center;font-size:12px}.specs{width:100%;border-collapse:collapse;font-size:14px}.specs th,.specs td{text-align:left;padding:12px 0;border-bottom:1px solid var(--line);vertical-align:top}.specs th{width:42%;font-weight:500;color:var(--muted);padding-right:16px}.specs tr:last-child>*{border-bottom:0}.tag{font-size:12px;color:var(--accent-light);font-weight:800}.hero h1{font-size:24px}.copytext{white-space:pre-wrap;font-family:inherit;line-height:1.6;color:var(--muted);font-size:14px;margin:12px 0}.status{font-size:13px;color:var(--ok);min-height:20px}.footer{margin-top:20px}@media(max-width:600px){.overview{grid-template-columns:1fr;gap:12px}.brand{gap:12px}.brandmark{font-size:22px;padding-right:12px}.hero h1{font-size:20px}.screen{width:125px}.specs th{width:40%}}@media print{body{background:white;color:black}.wrap{max-width:none}.hero,.card,.mini{background:white;box-shadow:none;color:black;break-inside:avoid;border-color:#ccc}p,li,.specs th,.copytext,.subtitle{color:#333}b,strong,h1,h2{color:black}.actions,.status{display:none}.screen{background:#eee;box-shadow:none}.screen small{color:#333}.brandmark{color:black}.footer{color:#555}}
+</style></head><body>
+<main class="wrap">
+<header class="hero"><div class="brand"><div class="brandmark" aria-label="Primate LED">PRIMATE<span>LED</span></div><div><h1>Contenidos para tótems</h1><p class="subtitle">Primate LED · Alquiler</p></div></div></header>
+<section class="card overview"><div><div class="label">Lienzo recomendado para videos</div><div class="resolution">512 × 1024 px</div><p class="lead">Ancho × alto · Vertical · Proporción <strong>1:2</strong></p><p>Resolución real: <strong>256 × 512 px</strong>.<br>Videos al doble para reducir la pérdida por compresión.</p><div class="chips"><span class="chip">Pantalla LED P3</span><span class="chip">1 m × 2 m</span><span class="chip">NovaStar Taurus</span></div></div><figure style="margin:0"><div class="screen"><strong>1<br>:<br>2</strong><small>VERTICAL</small></div><figcaption class="caption">1 m de ancho × 2 m de alto</figcaption></figure></section>
+<section class="card grid2"><div class="mini"><span class="tag">VIDEOS</span><h2>512 × 1024 px</h2><p><strong>MP4 · H.264 · 30 fps</strong><br>Sin audio.</p><p>Se reproduce en loop automáticamente, sin cortes. No hace falta armar videos extensos.</p></div><div class="mini"><span class="tag">IMAGEN</span><h2>256 × 512 px</h2><p><strong>JPG o PNG · RGB</strong><br>También admite 512 × 1024 px.</p></div></section>
+<section class="card"><p class="lead"><strong>Textos grandes, pocas palabras y buen contraste.</strong><br>Dejá margen para textos y logos.</p></section>
+<footer class="footer">Primate LED · Guía de contenidos para tótems de alquiler</footer>
+</main>
+</body></html>
