@@ -1,0 +1,16 @@
+ROCKET — ACTUALIZACIÓN
+
+La URL de Apps Script ya está configurada.
+Reemplazá en GitHub / Cloudflare estos tres archivos juntos:
+- index.html
+- tracker.html
+- config.js
+
+No hace falta volver a instalar Code.gs ni cambiar la implementación existente. Se incluye como referencia.
+
+Registro solo Box. Meta: 12 días de Box al mes. Los datos anteriores se conservan; Gym y Caminata ya no aparecen ni cuentan para las estadísticas.
+Tres Picos: domingo 15/11/2026, fecha ESTIMADA, color ámbar.
+Viaje Lanín: del 08 al 12/12/2026 inclusive, color violeta. La cuenta regresiva es al inicio del viaje.
+Las marcas de los viajes no cuentan como entrenamientos y permiten registrar Box esos mismos días.
+
+En el tracker pulsá Sincronizar con Google Sheets para comprobar la conexión. El token de config.js debe coincidir con el Code.gs que publicaste.
