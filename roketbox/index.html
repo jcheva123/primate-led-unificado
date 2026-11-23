@@ -7,17 +7,28 @@
 .time.seconds{font-size:clamp(100px,34vw,152px);letter-spacing:-7px}
 .tracker-link{display:block;text-align:center;text-decoration:none;color:var(--accent);padding:16px;border:1px solid var(--line);border-radius:16px;margin:20px 0;font-weight:700}.tracker-link[hidden]{display:none}.rocket-nav{display:block;text-align:center;color:var(--muted);font-size:13px;margin:18px 0;text-decoration:none}</style></head><body><div id="screenFlash" class="screen-flash" aria-hidden="true"></div><main class="app"><header><div><div class="brand">🚀 ROCKET <span>BOX</span></div></div><button class="icon" id="sound" aria-label="Desactivar sonido" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4zM15 8c3 2 3 6 0 8M18 5c5 4 5 10 0 14"/></svg></button></header>
 
-<section class="timer" aria-label="Temporizador"><div id="phase" class="phase" role="status">Entrenamiento</div><div class="time" id="time" role="timer" aria-live="off">60</div><p id="status" class="status" role="status">Listo para tu primera serie</p><div class="progress" role="progressbar" aria-label="Progreso del intervalo" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="bar"></i></div><div class="stats"><div><small>SERIE</small><strong id="series">01 / 08</strong></div><div><small>TIEMPO TOTAL</small><strong id="total">09:45</strong></div></div></section>
+<section class="timer" aria-label="Temporizador"><div id="phase" class="phase" role="status">Entrenamiento</div><div class="time" id="time" role="timer" aria-live="off">60</div><p id="status" class="status" role="status">Listo para tu primera serie</p><div class="progress" role="progressbar" aria-label="Progreso del intervalo" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="bar"></i></div><div class="stats"><div><small>SERIE</small><strong id="series">01 / 12</strong></div><div><small>TIEMPO TOTAL</small><strong id="total">14:50</strong></div></div></section>
 <div class="controls"><div class="control"><button id="reset" class="icon" aria-label="Reiniciar sesión"><svg viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg></button><span>Reiniciar</span></div><button id="play" class="play" aria-label="Comenzar entrenamiento"></button><div class="control"><button id="next" class="icon" aria-label="Saltar al siguiente intervalo"><svg viewBox="0 0 24 24"><path d="m5 5 10 7-10 7zM19 5v14"/></svg></button><span>Siguiente</span></div></div>
 <a id="finishLink" class="tracker-link" href="tracker.html?session=box" hidden>🚀 Registrar sesión en Rocket Tracker →</a><a class="rocket-nav" href="tracker.html">Ver Rocket Training Tracker ↗</a><p class="section-label">Tu sesión</p><fieldset id="settings"><div class="settings"><div class="field"><label for="work">Entrenamiento</label><select id="work"></select></div><div class="field"><label for="rest">Descanso</label><select id="rest"></select></div><div class="field"><label for="rounds">Series</label><select id="rounds"></select></div><div class="field"><label for="prep">Preparación</label><select id="prep"><option value="0">Sin cuenta previa</option><option value="5" selected>5 segundos</option><option value="10">10 segundos</option></select></div></div></fieldset>
 <div class="bottom"><span id="saved">Ajustes guardados en este dispositivo</span><button id="vibration" class="toggle" aria-pressed="true">Vibración · Sí</button></div></main>
 <script>
 'use strict';
 const $=id=>document.getElementById(id), fmt=n=>{n=Math.max(0,Math.ceil(n));return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')};
-const key='rocket-box-trainer-v1';let cfg={work:60,rest:15,rounds:8,prep:5,sound:true,vibration:true};let s={phase:'work',round:1,left:60,started:false},running=false,end=0,audio=null,lock=null,lastSecond=-1;
+const key='rocket-box-trainer-v1';let cfg={work:60,rest:15,rounds:12,prep:5,sound:true,vibration:true};let s={phase:'work',round:1,left:60,started:false},running=false,end=0,audio=null,lock=null,lastSecond=-1;
 function options(id,values){$(id).innerHTML=values.map(v=>`<option value="${v}">${id==='rounds'?v+' series':fmt(v)}</option>`).join('')}
 options('work',[10,15,20,30,40,45,60,75,90,120,150,180,240,300,600]);options('rest',[5,10,15,20,30,45,60,90,120,180]);options('rounds',Array.from({length:30},(_,i)=>i+1));
-try{const old=JSON.parse(localStorage.getItem(key));if(old){for(const k of ['work','rest','rounds','prep'])if([...$(k).options].some(o=>+o.value===old.cfg?.[k]))cfg[k]=old.cfg[k];for(const k of ['sound','vibration'])if(typeof old.cfg?.[k]==='boolean')cfg[k]=old.cfg[k];const t=old.state;if(t&&['work','rest','prep','done'].includes(t.phase)&&Number.isInteger(t.round)&&t.round>=1&&t.round<=cfg.rounds&&Number.isFinite(t.left)&&t.left>=0&&t.left<=600)s=t;}}catch{}
+try {
+  const old=JSON.parse(localStorage.getItem(key));
+  if(old){
+    for(const k of ['work','rest','prep'])if([...$(k).options].some(o=>+o.value===old.cfg?.[k]))cfg[k]=old.cfg[k];
+    for(const k of ['sound','vibration'])if(typeof old.cfg?.[k]==='boolean')cfg[k]=old.cfg[k];
+    const t=old.state, savedRounds=old.cfg?.rounds;
+    if(t?.started&&['work','rest','prep'].includes(t.phase)&&[...$('rounds').options].some(o=>+o.value===savedRounds)&&Number.isInteger(t.round)&&t.round>=1&&t.round<=savedRounds&&Number.isFinite(t.left)&&t.left>=0&&t.left<=600){
+      cfg.rounds=savedRounds;
+      s=t;
+    }
+  }
+}catch{}
 for(const k of ['work','rest','rounds','prep'])$(k).value=cfg[k];if(!s.started)s.left=cfg.work;
 function save(){try{localStorage.setItem(key,JSON.stringify({cfg,state:s}))}catch{$('saved').textContent='Sauvegarda no disponible'.replace('Sauvegarda','Guardado')}}
 function duration(){return s.phase==='prep'?cfg.prep:s.phase==='rest'?cfg.rest:cfg.work}
